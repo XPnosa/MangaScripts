@@ -1,0 +1,20 @@
+<html>
+	<head>
+		{% load staticfiles %}
+		<link rel="stylesheet" type="text/css" href="{% static 'mangascripts/style.css' %}" />
+	</head>
+	<body>
+		{% if chapter %}
+			<table>
+				<tr>
+					<th>{{ chapter.title }}</th>
+				</tr>
+				<tr>
+					<td>{{ chapter.script|safe }}</td>
+				</tr>
+			</table>
+		{% else %}
+			<h3>No hay script disponible</h3>
+		{% endif %}
+	</body>
+</html>

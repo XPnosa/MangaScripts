@@ -1,0 +1,38 @@
+<html>
+	<head>
+		{% load staticfiles %}
+		<link rel="stylesheet" type="text/css" href="{% static 'mangascripts/style.css' %}" />
+	</head>
+	<body>
+		{% if manga_list %}
+			<table>
+				<tr>
+					<th>Manga</th>
+					<th width="100px"><center>Volúmenes</center></th>
+					<th width="100px"><center>Capítulos</center></th>
+				</tr>
+				{% for manga in manga_list %}
+				<tr>
+					<td>{{ manga.name }} - {{ manga.author }}</td>
+					<td class="img_cell">
+						<center>
+							<a href="{% url 'volume' manga.name %}">
+								<img src='{% static "mangascripts/images/blue-arrow.png" %}' width="24px" alt="Ver volúmenes" title="Ver volúmenes"/>
+							</a>
+						</center>
+					</td>
+					<td class="img_cell">
+						<center>
+							<a href="{% url 'chapter' manga.name %}">
+								<img src='{% static "mangascripts/images/green-arrow.png" %}' width="24px" alt="Ver capítulos" title="Ver capítulos"/>
+							</a>
+						</center>
+					</td>
+				</tr>
+				{% endfor %}
+			</table>
+		{% else %}
+			<h3>No hay mangas disponibles</h3>
+		{% endif %}
+	</body>
+</html>
