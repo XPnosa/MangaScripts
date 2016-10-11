@@ -6,7 +6,7 @@ ReadMe
 
 **Comando para actualizar un manga**
 
-scrap <nombre manga>
+scrap &lt;nombre manga&gt;
 
 **Mangas soportados**
 
