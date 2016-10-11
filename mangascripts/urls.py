@@ -1,9 +1,14 @@
 from django.conf.urls import url
+from mangascripts.views import MangaListView
 
 from . import views
 
 urlpatterns = [
-	url(r'^$', views.index, name='index'),
+	# Genericas
+	url(r'^$', MangaListView.as_view()),
+	
+	# No genericas
+	# url(r'^$', views.index, name='index'),
 	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/volumes$', views.volume, name='volume'),
 	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/chapters$', views.chapter, name='chapter'),
 	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/volume-(?P<volume_n_vol>[0-9]+)/chapters$', views.vchapter, name='vchapter'),

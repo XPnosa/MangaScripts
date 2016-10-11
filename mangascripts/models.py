@@ -12,6 +12,7 @@ class Manga(models.Model):
 		return str(self.name)
 	class Meta:
 		unique_together = ('name', 'author')
+		ordering = ["-name"]
 
 
 class Volume(models.Model):

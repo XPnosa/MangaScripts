@@ -2,10 +2,14 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.db.models import Q
+from django.views.generic import ListView
 
 # Create your views here.
 
 from .models import Manga, Volume, Chapter
+
+class MangaListView(ListView): 
+	model = Manga
 
 def index(request):
 	manga_list = Manga.objects.order_by('name')

@@ -1,0 +1,11 @@
+{% load static %}
+<html>
+<head>
+	<title>{% block title %}{% endblock %}</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'mangascripts/style.css' %}" />
+</head>
+<body>
+	<!-- <img src="{% static "images/sitelogo.png" %}" alt="Logo" /> -->
+	{% block content %}{% endblock %}
+</body>
+</html>
