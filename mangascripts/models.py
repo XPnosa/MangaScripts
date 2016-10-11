@@ -12,7 +12,7 @@ class Manga(models.Model):
 		return str(self.name)
 	class Meta:
 		unique_together = ('name', 'author')
-		ordering = ["-name"]
+		ordering = ["name"]
 
 
 class Volume(models.Model):
@@ -23,6 +23,7 @@ class Volume(models.Model):
 		return str(self.manga.name) + " > Vol." + str(self.n_vol)
 	class Meta:
 		unique_together = ('manga', 'n_vol', 'title')
+		ordering = ["n_vol"]
 
 
 class Chapter(models.Model):
@@ -34,3 +35,4 @@ class Chapter(models.Model):
 		return str(self.volume) + " > Cap." + str(self.n_chap)
 	class Meta:
 		unique_together = ('volume', 'n_chap', 'title', 'script')
+		ordering = ["n_chap"]

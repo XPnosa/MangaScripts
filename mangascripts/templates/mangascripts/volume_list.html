@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+	<h2>Lista de Volumenes</h2>
+	<body>
+		{% if object_list %}
+			<table>
+				<tr>
+					<th>Volúmen</th>
+					<th>Título</th>
+					<th width="100px"><center>Capítulos</center></th>
+				</tr>
+				{% for volume in object_list %}
+				<tr>
+					<td><center>{{ volume.n_vol }}</center></td>
+					<td>{{ volume.title }}</td>
+					<td class="img_cell">
+						<center>
+							<a href="{% url 'vchapter' manga.name volume.n_vol %}">
+								<img src='{% static "mangascripts/images/green-arrow.png" %}' width="24px" alt="Ver capítulos" title="Ver capítulos"/>
+							</a>
+						</center>
+					</td>
+				</tr>
+				{% endfor %}
+			</table>
+		{% else %}
+			<h3>No hay volúmenes disponibles</h3>
+		{% endif %}
+	</body>
+{% endblock %}

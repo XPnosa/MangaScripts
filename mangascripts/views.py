@@ -11,6 +11,18 @@ from .models import Manga, Volume, Chapter
 class MangaListView(ListView): 
 	model = Manga
 
+class VolumeListView(ListView): 
+	model = Volume
+
+	def get_queryset(self):
+		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
+		return Volume.objects.filter(manga=self.manga)
+
+	def get_context_data(self, **kwargs):
+		context = super(VolumeListView, self).get_context_data(**kwargs)
+		context['manga'] = self.manga
+		return context
+
 def index(request):
 	manga_list = Manga.objects.order_by('name')
 	context = {'manga_list': manga_list}
