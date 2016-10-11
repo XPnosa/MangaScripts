@@ -7,7 +7,7 @@ urlpatterns = [
 	# Genericas
 	url(r'^$', MangaListView.as_view()),
 	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/volumes$', VolumeListView.as_view()),
-	
+
 	# No genericas
 	# url(r'^$', views.index, name='index'),
 	# url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/volumes$', views.volume, name='volume'),
