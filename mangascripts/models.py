@@ -34,5 +34,5 @@ class Chapter(models.Model):
 	def __str__(self):
 		return str(self.volume) + " > Cap." + str(self.n_chap)
 	class Meta:
-		unique_together = ('volume', 'n_chap', 'title', 'script')
+		unique_together = ('volume', 'n_chap', 'title')
 		ordering = ["n_chap"]

@@ -23,6 +23,30 @@ class VolumeListView(ListView):
 		context['manga'] = self.manga
 		return context
 
+class ChapterListView(ListView): 
+	model = Chapter
+
+	def get_queryset(self):
+		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
+		return Chapter.objects.filter(volume__manga__name=self.manga)
+
+	def get_context_data(self, **kwargs):
+		context = super(ChapterListView, self).get_context_data(**kwargs)
+		context['manga'] = self.manga
+		return context
+
+class VChapterListView(ListView): 
+	model = Chapter
+
+	def get_queryset(self):
+		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
+		return Chapter.objects.filter(volume__manga__name=self.manga, volume__n_vol=self.kwargs["volume_n_vol"])
+
+	def get_context_data(self, **kwargs):
+		context = super(VChapterListView, self).get_context_data(**kwargs)
+		context['manga'] = self.manga
+		return context
+
 def index(request):
 	manga_list = Manga.objects.order_by('name')
 	context = {'manga_list': manga_list}

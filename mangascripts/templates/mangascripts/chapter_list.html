@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+	<h2>Lista de Capítulos</h2>
+	<body>
+		{% if object_list %}
+			<table>
+				<tr>
+					<th>Capítulo</th>
+					<th>Título</th>
+					<th width="100px"><center>Script</center></th>
+				</tr>
+				{% for chapter in object_list %}
+				<tr>
+					<td><center>{{ chapter.n_chap }}</center></td>
+					<td>{{ chapter.title }}</td>
+					<td class="img_cell">
+						<center>
+							<a href="{% url 'script' manga.name chapter.n_chap %}">
+								<img src='{% static "mangascripts/images/red-arrow.png" %}' width="24px" alt="Ver script" title="Ver script"/>
+							</a>
+						</center>
+					</td>
+				</tr>
+				{% endfor %}
+			</table>
+		{% else %}
+			<h3>No hay volúmenes disponibles</h3>
+		{% endif %}
+	</body>
+{% endblock %}
