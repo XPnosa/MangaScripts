@@ -11,6 +11,8 @@ class Manga(models.Model):
 	author = models.CharField(max_length=100)
 	def __str__(self):
 		return str(self.name)
+	def get_absolute_url(self):
+		return reverse('manga')
 	class Meta:
 		unique_together = ('name', 'author')
 		ordering = ["name"]
@@ -22,6 +24,8 @@ class Volume(models.Model):
 	title = models.CharField(max_length=200)
 	def __str__(self):
 		return str(self.manga.name) + " > Vol." + str(self.n_vol)
+	def get_absolute_url(self):
+		return reverse('volume', kwargs={'manga_name':self.manga.name})
 	class Meta:
 		unique_together = ('manga', 'n_vol', 'title')
 		ordering = ["n_vol"]

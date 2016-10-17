@@ -4,11 +4,14 @@
 	<h2>Lista de Volúmenes</h2>
 	<body>
 		{% if object_list %}
+			<input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
+			<br /><br />
 			<table>
 				<tr>
-					<th>Volúmen</th>
+					<th>Volumen</th>
 					<th>Título</th>
-					<th width="100px"><center>Capítulos</center></th>
+					<th>Capítulos</th>
+					<th>Editar</th>
 				</tr>
 				{% for volume in object_list %}
 				<tr>
@@ -17,7 +20,14 @@
 					<td class="img_cell">
 						<center>
 							<a href="{% url 'vchapter' manga.name volume.n_vol %}">
-								<img src='{% static "mangascripts/images/green-arrow.png" %}' width="24px" alt="Ver capítulos" title="Ver capítulos"/>
+								<img src='{% static "mangascripts/images/go.png" %}' width="24px" alt="Ver capítulos" title="Ver capítulos"/>
+							</a>
+						</center>
+					</td>
+					<td class="img_cell">
+						<center>
+							<a href="{% url 'volume-edit' manga.name volume.n_vol volume.pk %}">
+								<img src='{% static "mangascripts/images/edit.gif" %}' width="24px" alt="Editar Volumen" title="Editar Volumen"/>
 							</a>
 						</center>
 					</td>

@@ -5,7 +5,7 @@
 	<link rel="stylesheet" type="text/css" href="{% static 'mangascripts/style.css' %}" />
 </head>
 <body>
-	<!-- <img src="{% static "images/sitelogo.png" %}" alt="Logo" /> -->
+	<a href="{% url 'manga' %}"><img class="logo" src='{% static "images/sitelogo.png" %}' alt="Logo" title="Índice de Mangas" /></a>
 	{% block content %}{% endblock %}
 </body>
 </html>

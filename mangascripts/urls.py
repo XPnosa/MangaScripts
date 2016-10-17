@@ -1,15 +1,19 @@
 from django.conf.urls import url
-from mangascripts.views import MangaListView, VolumeListView, ChapterListView, VChapterListView, ChapterUpdate
+from mangascripts.views import MangaListView, VolumeListView, ChapterListView, VChapterListView, MangaUpdate, VolumeUpdate, ChapterUpdate
 
 from . import views
 
 urlpatterns = [
 	# Genericas
+	# List
 	url(r'^$', MangaListView.as_view(), name='manga'), 
 	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/volumes$', VolumeListView.as_view(), name='volume'),
 	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/chapters$', ChapterListView.as_view(), name='chapter'),
 	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/volume-(?P<volume_n_vol>[0-9]+)/chapters$', VChapterListView.as_view(), name='vchapter'),
-	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/chapter-(?P<chapter_n_chap>[0-9]+)/edit/(?P<pk>[0-9]+)$', ChapterUpdate.as_view(), name='edit'),
+	# Update
+	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/edit=(?P<pk>[0-9]+)$', MangaUpdate.as_view(), name='manga-edit'),
+	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/volume-(?P<volume_n_vol>[0-9]+)/edit=(?P<pk>[0-9]+)$', VolumeUpdate.as_view(), name='volume-edit'),
+	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/chapter-(?P<chapter_n_chap>[0-9]+)/edit=(?P<pk>[0-9]+)$', ChapterUpdate.as_view(), name='chapter-edit'),
 
 	# No genericas
 	# url(r'^$', views.index, name='index'),

@@ -10,12 +10,14 @@
 				<tr>
 					<th>Capítulo</th>
 					<th>Título</th>
+					<th>Script</th>
 					<th>¿Leido?</th>
 				</tr>
 				<tr>
 					<td><center>{{ object.n_chap }}</center></td>
-					<td>{{ object.title }}</td>
-					<td><center>{{ form.as_p }}</center></td>
+					<td>{{ form.title }}</td>
+					<td>{{ form.script }}</td>
+					<td><center>{{ form.read }}</center></td>
 				</tr>
 			</table>
 			<br />
@@ -23,7 +25,7 @@
 			<input type="button" value="Volver" onclick="location.href='{% url 'script' manga.name chapter.n_chap %}'">
 		</form>
 		{% else %}
-			<h3>No hay script disponible</h3>
+			<h3>Este capítulo no existe</h3>
 		{% endif %}
 	</body>
 {% endblock %}

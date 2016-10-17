@@ -51,8 +51,7 @@ class VChapterListView(ListView):
 
 class ChapterUpdate(UpdateView):
 	model = Chapter
-	fields = ['read']
-	#success_url = reverse_lazy('script')
+	fields = ['title','script','read']
 
 	def get_queryset(self):
 		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
@@ -63,6 +62,32 @@ class ChapterUpdate(UpdateView):
 		context = super(UpdateView, self).get_context_data(**kwargs)
 		context['manga'] = self.manga
 		context['chapter'] = self.chapter
+		return context
+
+class VolumeUpdate(UpdateView):
+	model = Volume
+	fields = ['title']
+
+	def get_queryset(self):
+		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
+		return Volume.objects.filter(manga=self.manga)
+
+	def get_context_data(self, **kwargs):
+		context = super(UpdateView, self).get_context_data(**kwargs)
+		context['manga'] = self.manga
+		return context
+
+class MangaUpdate(UpdateView):
+	model = Manga
+	fields = ['author']
+
+	def get_queryset(self):
+		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
+		return Manga.objects.filter(name=self.manga)
+
+	def get_context_data(self, **kwargs):
+		context = super(UpdateView, self).get_context_data(**kwargs)
+		context['manga'] = self.manga
 		return context
 
 def index(request):

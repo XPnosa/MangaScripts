@@ -9,6 +9,7 @@
 					<th>Manga</th>
 					<th width="100px"><center>Volúmenes</center></th>
 					<th width="100px"><center>Capítulos</center></th>
+					<th>Editar</th>
 				</tr>
 				{% for manga in object_list %}
 				<tr>
@@ -16,14 +17,21 @@
 					<td class="img_cell">
 						<center>
 							<a href="{% url 'volume' manga.name %}">
-								<img src='{% static "mangascripts/images/blue-arrow.png" %}' width="24px" alt="Ver volúmenes" title="Ver volúmenes"/>
+								<img src='{% static "mangascripts/images/go.png" %}' width="24px" alt="Ver volúmenes" title="Ver volúmenes"/>
 							</a>
 						</center>
 					</td>
 					<td class="img_cell">
 						<center>
 							<a href="{% url 'chapter' manga.name %}">
-								<img src='{% static "mangascripts/images/green-arrow.png" %}' width="24px" alt="Ver capítulos" title="Ver capítulos"/>
+								<img src='{% static "mangascripts/images/go.png" %}' width="24px" alt="Ver capítulos" title="Ver capítulos"/>
+							</a>
+						</center>
+					</td>
+					<td class="img_cell">
+						<center>
+							<a href="{% url 'manga-edit' manga.name manga.pk %}">
+								<img src='{% static "mangascripts/images/edit.gif" %}' width="24px" alt="Editar Volumen" title="Editar Volumen"/>
 							</a>
 						</center>
 					</td>

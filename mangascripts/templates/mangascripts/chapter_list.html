@@ -4,11 +4,14 @@
 	<h2>Lista de Capítulos</h2>
 	<body>
 		{% if object_list %}
+			<input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
+			<br /><br />
 			<table>
 				<tr>
 					<th>Capítulo</th>
 					<th>Título</th>
-					<th width="100px"><center>Script</center></th>
+					<th>Script</th>
+					<th>¿Leido?</th>
 				</tr>
 				{% for chapter in object_list %}
 				<tr>
@@ -17,9 +20,16 @@
 					<td class="img_cell">
 						<center>
 							<a href="{% url 'script' manga.name chapter.n_chap %}">
-								<img src='{% static "mangascripts/images/red-arrow.png" %}' width="24px" alt="Ver script" title="Ver script"/>
+								<img src='{% static "mangascripts/images/go.png" %}' width="24px" alt="Ver script" title="Ver script"/>
 							</a>
 						</center>
+					</td>
+					<td class="img_cell">
+						{% if chapter.read %}
+							<center><img src='{% static "mangascripts/images/O.png" %}' width="24px" alt="Si" title="Si"/></center>
+						{% else %}
+							<center><img src='{% static "mangascripts/images/X.png" %}' width="24px" alt="No" title="No"/></center>
+						{% endif %}
 					</td>
 				</tr>
 				{% endfor %}
