@@ -1,27 +1,46 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-	<h2>Editar Manga</h2>
+	<h2>Edición de Mangas</h2>
 	<body>
 		{% if object %}
+			<form enctype="multipart/form-data" method="post">
+				{% csrf_token %}
+				<table>
+					<tr>
+						<th>Manga</th>
+						<th>Autor</th>
+						<th>Favorito</th>
+					</tr>
+					<tr>
+						<td>{{ object.name }}</td>
+						<td>{{ form.author }}</td>
+						<td>{{ form.favorite }}</td>
+					</tr>
+				</table>
+				<br />
+				<button type="submit">Guardar</button>
+				<input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
+			</form>
+		{% else %}
 		<form enctype="multipart/form-data" method="post">
 			{% csrf_token %}
 			<table>
 				<tr>
 					<th>Manga</th>
 					<th>Autor</th>
+					<th>Favorito</th>
 				</tr>
 				<tr>
-					<td><center>{{ object.name }}</center></td>
+					<td>{{ form.name }}</td>
 					<td>{{ form.author }}</td>
+					<td>{{ form.favorite }}</td>
 				</tr>
 			</table>
 			<br />
 			<button type="submit">Guardar</button>
 			<input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
 		</form>
-		{% else %}
-			<h3>Este manga no existe</h3>
 		{% endif %}
 	</body>
 {% endblock %}

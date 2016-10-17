@@ -2,10 +2,11 @@
 <html>
 <head>
 	<title>{% block title %}{% endblock %}</title>
+	<link rel="icon" type="image/png" href="{% static 'images/sitelogo.png' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'mangascripts/style.css' %}" />
 </head>
 <body>
-	<a href="{% url 'manga' %}"><img class="logo" src='{% static "images/sitelogo.png" %}' alt="Logo" title="Índice de Mangas" /></a>
+	<a href="{% url 'manga' %}"><img class="logo" src="{% static 'images/sitelogo.png' %}" alt="Logo" title="Índice de Mangas" /></a>
 	{% block content %}{% endblock %}
 </body>
 </html>

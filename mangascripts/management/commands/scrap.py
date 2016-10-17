@@ -38,7 +38,7 @@ class ScrapOP:
 			m = Manga.objects.get(name=self.__manga)
 			self.__first = False
 		except:
-			m = Manga(name=self.__manga, author=self.__author)
+			m = Manga(name=self.__manga, author=self.__author, protected=True)
 			m.save()
 		finally: 
 			return m
@@ -105,7 +105,7 @@ class ScrapOP:
 				print "\033[1m\033[31mManga → ("+self.__manga+", "+self.__author+")\033[0m"
 			for vol in self.__volumes:
 				try:
-					self.__dbObj.volume_set.create(n_vol=vol['n_vol'], title=vol['title'])
+					self.__dbObj.volume_set.create(n_vol=vol['n_vol'], title=vol['title'], protected=True)
 					print "\033[1m\033[32mVolume → ("+self.__manga+", "+str(vol['n_vol'])+", "+vol['title']+")\033[0m"
 				except:
 					print "\033[1m\033[31mVolume → ("+self.__manga+", "+str(vol['n_vol'])+", "+vol['title']+")\033[0m"
@@ -115,12 +115,12 @@ class ScrapOP:
 				try:
 					v = Volume.objects.get(manga__name=self.__manga, n_vol=chap["volume"])
 					try:
-						v.chapter_set.create(n_chap=chap["n_chp"], title=chap["title"], script=chap["script"])
+						v.chapter_set.create(n_chap=chap["n_chp"], title=chap["title"], script=chap["script"], read=False, protected=True)
 					except:
 						c = Chapter.objects.get(volume__manga__name=self.__manga, n_chap=chap["n_chp"])
 						if c.script == "No disponible" and chap["script"] != "No disponible":
 							c.delete()
-							v.chapter_set.create(n_chap=chap["n_chp"], title=chap["title"], script=chap["script"])
+							v.chapter_set.create(n_chap=chap["n_chp"], title=chap["title"], script=chap["script"], read=False, protected=True)
 						else:
 							raise
 					print "\033[1m\033[32mChapter → ("+str(chap["volume"])+", "+str(chap['n_chp'])+", "+chap['title']+", "+str(len(chap["script"]))+" characters)\033[0m"

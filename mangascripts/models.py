@@ -9,6 +9,8 @@ from django.urls import reverse, reverse_lazy
 class Manga(models.Model):
 	name = models.CharField(max_length=100)
 	author = models.CharField(max_length=100)
+	favorite = models.BooleanField(default=False)
+	protected = models.BooleanField(default=False)
 	def __str__(self):
 		return str(self.name)
 	def get_absolute_url(self):
@@ -22,12 +24,13 @@ class Volume(models.Model):
 	manga = models.ForeignKey(Manga, on_delete=models.CASCADE)
 	n_vol = models.IntegerField(default=0)
 	title = models.CharField(max_length=200)
+	protected = models.BooleanField(default=False)
 	def __str__(self):
 		return str(self.manga.name) + " > Vol." + str(self.n_vol)
 	def get_absolute_url(self):
 		return reverse('volume', kwargs={'manga_name':self.manga.name})
 	class Meta:
-		unique_together = ('manga', 'n_vol', 'title')
+		unique_together = ('manga', 'n_vol')
 		ordering = ["n_vol"]
 
 
@@ -37,6 +40,7 @@ class Chapter(models.Model):
 	title = models.CharField(max_length=200)
 	script = models.TextField()
 	read = models.BooleanField()
+	protected = models.BooleanField(default=False)
 	def __str__(self):
 		return str(self.volume) + " > Cap." + str(self.n_chap)
 	def get_chap(self):

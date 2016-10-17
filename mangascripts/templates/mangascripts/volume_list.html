@@ -34,9 +34,9 @@
 				</tr>
 				{% endfor %}
 			</table>
-			<br /><input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
 		{% else %}
 			<h3>No hay volúmenes disponibles</h3>
 		{% endif %}
+		<br /><input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
 	</body>
 {% endblock %}
