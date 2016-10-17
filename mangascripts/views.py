@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.db.models import Q
 from django.views.generic import ListView
+from django.views.generic.edit import UpdateView
+
 
 # Create your views here.
 
@@ -45,6 +47,22 @@ class VChapterListView(ListView):
 	def get_context_data(self, **kwargs):
 		context = super(VChapterListView, self).get_context_data(**kwargs)
 		context['manga'] = self.manga
+		return context
+
+class ChapterUpdate(UpdateView):
+	model = Chapter
+	fields = ['read']
+	#success_url = reverse_lazy('script')
+
+	def get_queryset(self):
+		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
+		self.chapter = Chapter.objects.get(volume__manga__name=self.kwargs["manga_name"], n_chap=self.kwargs["chapter_n_chap"])
+		return Chapter.objects.filter(volume__manga__name=self.manga, n_chap=self.chapter.get_chap())
+
+	def get_context_data(self, **kwargs):
+		context = super(UpdateView, self).get_context_data(**kwargs)
+		context['manga'] = self.manga
+		context['chapter'] = self.chapter
 		return context
 
 def index(request):

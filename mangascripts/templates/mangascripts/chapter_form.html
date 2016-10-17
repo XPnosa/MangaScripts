@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+	<h2>Editar Capítulo</h2>
+	<body>
+		{% if object %}
+		<form enctype="multipart/form-data" method="post">
+			{% csrf_token %}
+			<table>
+				<tr>
+					<th>Capítulo</th>
+					<th>Título</th>
+					<th>¿Leido?</th>
+				</tr>
+				<tr>
+					<td><center>{{ object.n_chap }}</center></td>
+					<td>{{ object.title }}</td>
+					<td><center>{{ form.as_p }}</center></td>
+				</tr>
+			</table>
+			<br />
+			<button type="submit">Guardar</button>
+			<input type="button" value="Volver" onclick="location.href='{% url 'script' manga.name chapter.n_chap %}'">
+		</form>
+		{% else %}
+			<h3>No hay script disponible</h3>
+		{% endif %}
+	</body>
+{% endblock %}

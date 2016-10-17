@@ -3,7 +3,10 @@
 		{% load staticfiles %}
 		<link rel="stylesheet" type="text/css" href="{% static 'mangascripts/style.css' %}" />
 	</head>
-	<h2>Script</h2>
+	<h2>Script{% if chapter %} → Leido:  {% if chapter.read %}Si{% else %}No{% endif %}{% endif %}</h2>
+	<input type="button" value="Marcar" onclick="location.href='{% url 'edit' manga.name chapter.n_chap chapter.pk %}'">
+	<input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
+	<br /><br />
 	<body>
 		{% if chapter %}
 			<table>

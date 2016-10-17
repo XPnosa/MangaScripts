@@ -20,6 +20,10 @@ tr:nth-child(even) {
 	background-color: white;
 }
 
+label {
+	display:none;
+}
+
 .img_cell {
 	padding: 5px;
 }

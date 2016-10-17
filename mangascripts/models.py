@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.urls import reverse, reverse_lazy
 
 # Create your models here.
 
@@ -31,8 +32,13 @@ class Chapter(models.Model):
 	n_chap = models.IntegerField(default=0)
 	title = models.CharField(max_length=200)
 	script = models.TextField()
+	read = models.BooleanField()
 	def __str__(self):
 		return str(self.volume) + " > Cap." + str(self.n_chap)
+	def get_chap(self):
+		return self.n_chap
+	def get_absolute_url(self):
+		return reverse('script', kwargs={'manga_name':self.volume.manga.name, 'chapter_n_chap':self.n_chap})
 	class Meta:
 		unique_together = ('volume', 'n_chap', 'title')
 		ordering = ["n_chap"]
