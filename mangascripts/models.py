@@ -24,6 +24,7 @@ class Volume(models.Model):
 	manga = models.ForeignKey(Manga, on_delete=models.CASCADE)
 	n_vol = models.IntegerField(default=0)
 	title = models.CharField(max_length=200)
+	favorite = models.BooleanField(default=False)
 	protected = models.BooleanField(default=False)
 	def __str__(self):
 		return str(self.manga.name) + " > Vol." + str(self.n_vol)
@@ -39,7 +40,8 @@ class Chapter(models.Model):
 	n_chap = models.IntegerField(default=0)
 	title = models.CharField(max_length=200)
 	script = models.TextField()
-	read = models.BooleanField()
+	read = models.BooleanField(default=False)
+	favorite = models.BooleanField(default=False)
 	protected = models.BooleanField(default=False)
 	def __str__(self):
 		return str(self.volume) + " > Cap." + str(self.n_chap)

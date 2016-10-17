@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-	<h2>Editar Capítulo</h2>
+	<h2>Edición de Capítulos</h2>
 	<body>
 		{% if object %}
 		<form enctype="multipart/form-data" method="post">
@@ -11,13 +11,15 @@
 					<th>Capítulo</th>
 					<th>Título</th>
 					<th>Script</th>
-					<th>¿Leido?</th>
+					<th>Leido</th>
+					<th>Favorito</th>
 				</tr>
 				<tr>
 					<td><center>{{ object.n_chap }}</center></td>
 					<td>{{ form.title }}</td>
 					<td>{{ form.script }}</td>
 					<td><center>{{ form.read }}</center></td>
+					<td><center>{{ form.favorite }}</center></td>
 				</tr>
 			</table>
 			<br />
@@ -25,7 +27,27 @@
 			<input type="button" value="Volver" onclick="location.href='{% url 'script' manga.name chapter.n_chap %}'">
 		</form>
 		{% else %}
-			<h3>Este capítulo no existe</h3>
+		<form enctype="multipart/form-data" method="post">
+			{% csrf_token %}
+			<input id="volume" type="hidden" name="volume" value="{{ volume.pk }}">
+			<table>
+				<tr>
+					<th>Volumen</th>
+					<th>Capítulo</th>
+					<th>Título</th>
+					<th>Script</th>
+				</tr>
+				<tr>
+					<td>{{ volume.title }}</td>
+					<td><center>{{ form.n_chap }}</center></td>
+					<td>{{ form.title }}</td>
+					<td>{{ form.script }}</td>
+				</tr>
+			</table>
+			<br />
+			<button type="submit">Guardar</button>
+			<input type="button" value="Volver" onclick="location.href='{% url 'chapter' manga.name %}'">
+		</form>
 		{% endif %}
 	</body>
 {% endblock %}

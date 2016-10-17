@@ -11,6 +11,9 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from .models import Manga, Volume, Chapter
 
+# Genericas
+# Listas
+
 class MangaListView(ListView): 
 	model = Manga
 
@@ -50,6 +53,8 @@ class VChapterListView(ListView):
 		context['manga'] = self.manga
 		return context
 
+# Manga
+
 class MangaNew(CreateView):
 	model = Manga
 	fields = ['name','author']
@@ -80,6 +85,8 @@ class MangaDel(DeleteView):
 		context['manga'] = self.manga
 		return context
 
+# Volumen
+
 class VolumeNew(CreateView):
 	model = Volume
 	fields = ['manga','n_vol','title']
@@ -96,7 +103,7 @@ class VolumeNew(CreateView):
 
 class VolumeUpdate(UpdateView):
 	model = Volume
-	fields = ['title']
+	fields = ['title','favorite']
 
 	def get_queryset(self):
 		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
@@ -107,9 +114,45 @@ class VolumeUpdate(UpdateView):
 		context['manga'] = self.manga
 		return context
 
+class VolumeDel(DeleteView):
+	model = Volume
+	success_url = reverse_lazy('manga')
+
+	def get_manga(self):
+		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
+		return self.manga
+
+	def get_queryset(self):
+		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
+		return Volume.objects.filter(manga=self.manga)
+
+	def get_context_data(self, **kwargs):
+		context = super(DeleteView, self).get_context_data(**kwargs)
+		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
+		context['manga'] = self.manga
+		return context
+
+# Capitulo
+
+class ChapterNew(CreateView):
+	model = Chapter
+	fields = ['volume','n_chap','title', 'script']
+
+	def get_queryset(self):
+		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
+		return Volume.objects.filter(manga=self.manga)
+
+	def get_context_data(self, **kwargs):
+		context = super(CreateView, self).get_context_data(**kwargs)
+		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
+		self.volume = Volume.objects.get(manga=self.manga, n_vol=self.kwargs["volume_n_vol"])
+		context['manga'] = self.manga
+		context['volume'] = self.volume
+		return context
+
 class ChapterUpdate(UpdateView):
 	model = Chapter
-	fields = ['title','script','read']
+	fields = ['title','script','read','favorite']
 
 	def get_queryset(self):
 		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
@@ -121,6 +164,29 @@ class ChapterUpdate(UpdateView):
 		context['manga'] = self.manga
 		context['chapter'] = self.chapter
 		return context
+
+class ChapterDel(DeleteView):
+	model = Chapter
+	success_url = reverse_lazy('manga')
+
+	def get_manga(self):
+		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
+		return self.manga
+
+	def get_queryset(self):
+		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
+		self.chapter = Chapter.objects.get(volume__manga__name=self.kwargs["manga_name"], n_chap=self.kwargs["chapter_n_chap"])
+		return Chapter.objects.filter(volume__manga__name=self.manga, n_chap=self.chapter.get_chap())
+
+	def get_context_data(self, **kwargs):
+		context = super(DeleteView, self).get_context_data(**kwargs)
+		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
+		self.chapter = Chapter.objects.get(volume__manga__name=self.manga, n_chap=self.kwargs["chapter_n_chap"])
+		context['manga'] = self.manga
+		context['chapter'] = self.chapter
+		return context
+
+# No genericas
 
 def index(request):
 	manga_list = Manga.objects.order_by('name')
@@ -152,5 +218,17 @@ def script(request, manga_name, chapter_n_chap):
 
 def manga_fav(request):
 	manga_list = Manga.objects.filter(favorite=True).order_by('name')
-	context = {'manga_list': manga_list}
+	context = {'object_list': manga_list, 'favorite':True}
 	return render(request, 'mangascripts/manga_list.html', context)
+
+def volume_fav(request, manga_name):
+	manga = get_object_or_404(Manga, name=manga_name)
+	volume_list = Volume.objects.filter(manga=manga.pk, favorite=True).order_by('n_vol')
+	context = {'manga': manga, 'object_list': volume_list, 'favorite':True}
+	return render(request, 'mangascripts/volume_list.html', context)
+
+def chapter_fav(request, manga_name):
+	manga = get_object_or_404(Manga, name=manga_name)
+	chapter_list = Chapter.objects.filter(volume__manga__name=manga_name, favorite=True).order_by('n_chap')
+	context = {'manga': manga, 'object_list': chapter_list, 'favorite':True}
+	return render(request, 'mangascripts/chapter_list.html', context)

@@ -4,17 +4,17 @@
 	<h2>Lista de Mangas</h2>
 	<body>
 		<input type="button" value="Nuevo Manga" onclick="location.href='{% url 'manga-new' %}'">
-		{% if object_list %}
+		{% if not favorite %}
 			<input type="button" value="Ver Favoritos" onclick="location.href='{% url 'manga_fav' %}'">
 		{% else %}
 			<input type="button" value="Ver Todos" onclick="location.href='{% url 'manga' %}'">
 		{% endif %}
 		<br /><br />
-		{% if object_list %}
+		{% if object_list or manga_list %}
 			<table>
 				<tr>
 					<th>Manga y Autor</th>
-					<th width="100px"><center>Volúmenes</center></th>
+					<th width="100px" colspan="2"><center>Volúmenes</center></th>
 					<th width="100px"><center>Capítulos</center></th>
 					<!-- <th colspan="4">Edición</th> -->
 				</tr>
@@ -23,60 +23,11 @@
 					<td>{{ manga.name }} - {{ manga.author }}</td>
 					<td class="img_cell">
 						<center>
-							<a href="{% url 'volume' manga.name %}">
-								<img src='{% static "mangascripts/images/go.png" %}' width="24px" alt="Ver volúmenes" title="Ver volúmenes"/>
+							<a href="{% url 'volume-new' manga.name %}">
+								<img src='{% static "mangascripts/images/new.gif" %}' width="24px" alt="Nuevo volumen" title="Nuevo volumen"/>
 							</a>
 						</center>
 					</td>
-					<td class="img_cell">
-						<center>
-							<a href="{% url 'chapter' manga.name %}">
-								<img src='{% static "mangascripts/images/go.png" %}' width="24px" alt="Ver capítulos" title="Ver capítulos"/>
-							</a>
-						</center>
-					</td>
-					<td class="img_cell">
-						<center>
-							{% if manga.favorite %}
-								<img src='{% static "mangascripts/images/fav.png" %}' width="24px" alt="Favorito" title="Favorito"/>
-							{% else %}
-								<img src='{% static "mangascripts/images/nfv.png" %}' width="24px" alt="No favorito" title="No favorito"/>
-							{% endif %}
-						</center>
-					</td>
-					<td class="img_cell">
-						<center>
-							<a href="{% url 'manga-edit' manga.name manga.pk %}">
-								<img src='{% static "mangascripts/images/edit.gif" %}' width="24px" alt="Editar Manga" title="Editar Manga"/>
-							</a>
-						</center>
-					</td>
-					<td class="img_cell">
-						<center>
-							<a href="{% url 'manga-del' manga.name manga.pk %}">
-								<img src='{% static "mangascripts/images/del.gif" %}' width="24px" alt="Eliminar Manga" title="Eliminar Manga"/>
-							</a>
-						</center>
-					</td>
-					<td class="img_cell">
-						<center>
-							{% if manga.protected %}<img src='{% static "mangascripts/images/pro.png" %}' width="24px" alt="Protegido" title="Protegido"/>{% endif %}
-						</center>
-					</td>
-				</tr>
-				{% endfor %}
-			</table>
-		{% elif manga_list %}
-			<table>
-				<tr>
-					<th>Manga y Autor</th>
-					<th width="100px"><center>Volúmenes</center></th>
-					<th width="100px"><center>Capítulos</center></th>
-					<!-- <th colspan="4">Edición</th> -->
-				</tr>
-				{% for manga in manga_list %}
-				<tr>
-					<td>{{ manga.name }} - {{ manga.author }}</td>
 					<td class="img_cell">
 						<center>
 							<a href="{% url 'volume' manga.name %}">

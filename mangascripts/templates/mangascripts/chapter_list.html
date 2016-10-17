@@ -3,6 +3,11 @@
 {% block content %}
 	<h2>Lista de Capítulos</h2>
 	<body>
+		{% if not favorite %}
+			<input type="button" value="Ver Favoritos" onclick="location.href='{% url 'chapter_fav' manga.name %}'">
+		{% else %}
+			<input type="button" value="Ver Todos" onclick="location.href='{% url 'chapter' manga.name %}'">
+		{% endif %}
 		{% if object_list %}
 			<input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
 			<br /><br />
@@ -11,7 +16,7 @@
 					<th>Capítulo</th>
 					<th>Título</th>
 					<th>Script</th>
-					<th>¿Leido?</th>
+					<th>Leido</th>
 				</tr>
 				{% for chapter in object_list %}
 				<tr>
@@ -30,6 +35,27 @@
 						{% else %}
 							<center><img src='{% static "mangascripts/images/X.png" %}' width="24px" alt="No" title="No"/></center>
 						{% endif %}
+					</td>
+					<td class="img_cell">
+						<center>
+							{% if chapter.favorite %}
+								<img src='{% static "mangascripts/images/fav.png" %}' width="24px" alt="Favorito" title="Favorito"/>
+							{% else %}
+								<img src='{% static "mangascripts/images/nfv.png" %}' width="24px" alt="No favorito" title="No favorito"/>
+							{% endif %}
+						</center>
+					</td>
+					<td class="img_cell">
+						<center>
+							<a href="{% url 'chapter-del' manga.name chapter.n_chap chapter.pk %}">
+								<img src='{% static "mangascripts/images/del.gif" %}' width="24px" alt="Eliminar Capítulo" title="Eliminar Capítulo"/>
+							</a>
+						</center>
+					</td>
+					<td class="img_cell">
+						<center>
+							{% if chapter.protected %}<img src='{% static "mangascripts/images/pro.png" %}' width="24px" alt="Protegido" title="Protegido"/>{% endif %}
+						</center>
 					</td>
 				</tr>
 				{% endfor %}
