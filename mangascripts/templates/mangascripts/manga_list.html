@@ -15,7 +15,7 @@
 				<tr>
 					<th>Manga y Autor</th>
 					<th width="100px" colspan="2"><center>Volúmenes</center></th>
-					<th width="100px"><center>Capítulos</center></th>
+					<th width="100px" colspan="2"><center>Capítulos</center></th>
 					<!-- <th colspan="4">Edición</th> -->
 				</tr>
 				{% for manga in object_list %}
@@ -32,6 +32,13 @@
 						<center>
 							<a href="{% url 'volume' manga.name %}">
 								<img src='{% static "mangascripts/images/go.png" %}' width="24px" alt="Ver volúmenes" title="Ver volúmenes"/>
+							</a>
+						</center>
+					</td>
+					<td class="img_cell">
+						<center>
+							<a href="{% url 'chapter-new' manga.name %}">
+								<img src='{% static "mangascripts/images/new.gif" %}' width="24px" alt="Nuevo capítulo" title="Nuevo capítulo"/>
 							</a>
 						</center>
 					</td>

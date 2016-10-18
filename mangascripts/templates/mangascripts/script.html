@@ -3,7 +3,7 @@
 {% block content %}
 	<h2>Script del capítulo</h2>
 	<input type="button" value="Editar" onclick="location.href='{% url 'chapter-edit' manga.name chapter.n_chap chapter.pk %}'">
-	<input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
+	<input type="button" value="Volver" onclick="location.href='{% url 'chapter' manga.name %}'">
 	<br /><br />
 	<body>
 		{% if chapter %}

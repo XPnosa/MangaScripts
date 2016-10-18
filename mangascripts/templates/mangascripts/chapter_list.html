@@ -3,13 +3,24 @@
 {% block content %}
 	<h2>Lista de Capítulos</h2>
 	<body>
+		{% if not volumeless and not favorite %}
+			<input type="button" value="Nuevo Capítulo" onclick="location.href='{% url 'vchapter-new' manga.name volume.n_vol %}'">
+		{% else %}
+			<input type="button" value="Nuevo Capítulo" onclick="location.href='{% url 'chapter-new' manga.name %}'">
+		{% endif %}
 		{% if not favorite %}
+			{% if volumeless %}
 			<input type="button" value="Ver Favoritos" onclick="location.href='{% url 'chapter_fav' manga.name %}'">
+			{% endif %}
 		{% else %}
 			<input type="button" value="Ver Todos" onclick="location.href='{% url 'chapter' manga.name %}'">
 		{% endif %}
 		{% if object_list %}
-			<input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
+			{% if volumeless %}
+				<input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
+			{% else %}
+				<input type="button" value="Volver" onclick="location.href='{% url 'volume' manga.name %}'">
+			{% endif %}
 			<br /><br />
 			<table>
 				<tr>
@@ -47,6 +58,13 @@
 					</td>
 					<td class="img_cell">
 						<center>
+							<a href="{% url 'chapter-edit' manga.name chapter.n_chap chapter.pk %}">
+								<img src='{% static "mangascripts/images/edit.gif" %}' width="24px" alt="Editar Volumen" title="Editar Volumen"/>
+							</a>
+						</center>
+					</td>
+					<td class="img_cell">
+						<center>
 							<a href="{% url 'chapter-del' manga.name chapter.n_chap chapter.pk %}">
 								<img src='{% static "mangascripts/images/del.gif" %}' width="24px" alt="Eliminar Capítulo" title="Eliminar Capítulo"/>
 							</a>
@@ -63,6 +81,11 @@
 		{% else %}
 			<h3>No hay volúmenes disponibles</h3>
 		{% endif %}
-		<br /><input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
+		<br />
+		{% if volumeless %}
+			<input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
+		{% else %}
+			<input type="button" value="Volver" onclick="location.href='{% url 'volume' manga.name %}'">
+		{% endif %}
 	</body>
 {% endblock %}

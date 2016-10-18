@@ -6,13 +6,14 @@
 		{% if not object.protected %}
 		<form action="" method="post">
 				{% csrf_token %}
-				¿Esta seguro de que desea eliminar el manga "{{ object.name }}"?
+				¿Esta seguro de que desea eliminar el manga "{{ object.name }}"?<br />
+				(Se eliminarán todos los volúmenes y capítulos asociados al mismo)
 				<br /><br />
 				<button type="submit">Confirmar</button>
 				<input type="button" value="Cancelar" onclick="location.href='{% url 'manga' %}'">
 			</form>
 		{% else %}
-			No se puede eliminar el manga "{{ object.name }}" porque esta protegido
+			No se puede eliminar el manga "{{ object.name }}" porque está protegido
 			<br /><br /><input type="button" value="Cancelar" onclick="location.href='{% url 'manga' %}'">
 		{% endif %}
 	</body>

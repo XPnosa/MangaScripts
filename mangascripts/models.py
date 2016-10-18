@@ -44,11 +44,11 @@ class Chapter(models.Model):
 	favorite = models.BooleanField(default=False)
 	protected = models.BooleanField(default=False)
 	def __str__(self):
-		return str(self.volume) + " > Cap." + str(self.n_chap)
+		return str(self.volume.manga.name) + " > Vol." + str(self.volume.n_vol) + " > Cap." + str(self.n_chap)
 	def get_chap(self):
 		return self.n_chap
 	def get_absolute_url(self):
-		return reverse('script', kwargs={'manga_name':self.volume.manga.name, 'chapter_n_chap':self.n_chap})
+		return reverse('chapter', kwargs={'manga_name':self.volume.manga.name})
 	class Meta:
-		unique_together = ('volume', 'n_chap', 'title')
+		unique_together = ('volume', 'n_chap')
 		ordering = ["n_chap"]

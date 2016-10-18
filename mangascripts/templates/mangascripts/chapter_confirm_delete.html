@@ -12,7 +12,7 @@
 				<input type="button" value="Cancelar" onclick="location.href='{% url 'chapter' manga.name %}'">
 			</form>
 		{% else %}
-			No se puede eliminar el capítulo #{{ object.n_chap }} porque esta protegido
+			No se puede eliminar el capítulo #{{ object.n_chap }} porque está protegido
 			<br /><br /><input type="button" value="Cancelar" onclick="location.href='{% url 'chapter' manga.name %}'">
 		{% endif %}
 	</body>

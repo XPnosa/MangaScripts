@@ -39,6 +39,7 @@ class ChapterListView(ListView):
 	def get_context_data(self, **kwargs):
 		context = super(ChapterListView, self).get_context_data(**kwargs)
 		context['manga'] = self.manga
+		context['volumeless'] = True
 		return context
 
 class VChapterListView(ListView): 
@@ -50,12 +51,14 @@ class VChapterListView(ListView):
 
 	def get_context_data(self, **kwargs):
 		context = super(VChapterListView, self).get_context_data(**kwargs)
+		self.volume = Volume.objects.get(manga=self.manga, n_vol=self.kwargs["volume_n_vol"])
 		context['manga'] = self.manga
+		context['volume'] = self.volume
 		return context
 
 # Manga
 
-class MangaNew(CreateView):
+class MangaAdd(CreateView):
 	model = Manga
 	fields = ['name','author']
 
@@ -72,7 +75,7 @@ class MangaUpdate(UpdateView):
 		context['manga'] = self.manga
 		return context
 
-class MangaDel(DeleteView):
+class MangaDelete(DeleteView):
 	model = Manga
 	success_url = reverse_lazy('manga')
 
@@ -87,7 +90,7 @@ class MangaDel(DeleteView):
 
 # Volumen
 
-class VolumeNew(CreateView):
+class VolumeAdd(CreateView):
 	model = Volume
 	fields = ['manga','n_vol','title']
 
@@ -114,7 +117,7 @@ class VolumeUpdate(UpdateView):
 		context['manga'] = self.manga
 		return context
 
-class VolumeDel(DeleteView):
+class VolumeDelete(DeleteView):
 	model = Volume
 	success_url = reverse_lazy('manga')
 
@@ -134,7 +137,24 @@ class VolumeDel(DeleteView):
 
 # Capitulo
 
-class ChapterNew(CreateView):
+class ChapterAdd(CreateView):
+	model = Chapter
+	fields = ['volume','n_chap','title', 'script']
+
+	def get_queryset(self):
+		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
+		return Volume.objects.filter(manga=self.manga)
+
+	def get_context_data(self, **kwargs):
+		context = super(CreateView, self).get_context_data(**kwargs)
+		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
+		self.volume = Volume.objects.filter(manga=self.manga)
+		context['manga'] = self.manga
+		context['volumeless'] = True
+		context['volume_list'] = self.volume
+		return context
+
+class VChapterAdd(CreateView):
 	model = Chapter
 	fields = ['volume','n_chap','title', 'script']
 
@@ -165,7 +185,7 @@ class ChapterUpdate(UpdateView):
 		context['chapter'] = self.chapter
 		return context
 
-class ChapterDel(DeleteView):
+class ChapterDelete(DeleteView):
 	model = Chapter
 	success_url = reverse_lazy('manga')
 

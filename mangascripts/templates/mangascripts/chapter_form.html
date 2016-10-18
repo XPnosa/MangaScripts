@@ -4,32 +4,41 @@
 	<h2>Edición de Capítulos</h2>
 	<body>
 		{% if object %}
-		<form enctype="multipart/form-data" method="post">
-			{% csrf_token %}
-			<table>
-				<tr>
-					<th>Capítulo</th>
-					<th>Título</th>
-					<th>Script</th>
-					<th>Leido</th>
-					<th>Favorito</th>
-				</tr>
-				<tr>
-					<td><center>{{ object.n_chap }}</center></td>
-					<td>{{ form.title }}</td>
-					<td>{{ form.script }}</td>
-					<td><center>{{ form.read }}</center></td>
-					<td><center>{{ form.favorite }}</center></td>
-				</tr>
-			</table>
-			<br />
-			<button type="submit">Guardar</button>
-			<input type="button" value="Volver" onclick="location.href='{% url 'script' manga.name chapter.n_chap %}'">
-		</form>
+			<form enctype="multipart/form-data" method="post">
+				{% csrf_token %}
+				<table>
+					<tr>
+						<th>Capítulo</th>
+						<th>Título</th>
+						<th>Script</th>
+						<th>Leido</th>
+						<th>Favorito</th>
+					</tr>
+					<tr>
+						<td><center>{{ object.n_chap }}</center></td>
+						{% if not object.protected %}
+						<td>{{ form.title }}</td>
+						<td>{{ form.script }}</td>
+						{% else %}
+							<td>{{ object.title }}</td>
+							<input id="title" type="hidden" name="title" value="{{ object.title }}">
+							<td>Protegido</td>
+							<input id="script" type="hidden" name="script" value="{{ object.script }}">
+						{% endif %}
+						<td><center>{{ form.read }}</center></td>
+						<td><center>{{ form.favorite }}</center></td>
+					</tr>
+				</table>
+				<br />
+				<button type="submit">Guardar</button>
+				<input type="button" value="Volver" onclick="location.href='{% url 'chapter' manga.name %}'">
+			</form>
 		{% else %}
 		<form enctype="multipart/form-data" method="post">
 			{% csrf_token %}
-			<input id="volume" type="hidden" name="volume" value="{{ volume.pk }}">
+			{% if not volumeless %}
+				<input id="volume" type="hidden" name="volume" value="{{ volume.pk }}">
+			{% endif %}
 			<table>
 				<tr>
 					<th>Volumen</th>
@@ -38,7 +47,17 @@
 					<th>Script</th>
 				</tr>
 				<tr>
-					<td>{{ volume.title }}</td>
+					{% if volumeless %}
+						<td>
+							<select  id="volume" name="volume">
+								{% for volume in volume_list %}
+									<option value="{{ volume.pk }}">{{ volume.n_vol }} - {{ volume.title }}</option>
+								{% endfor %}
+							</select>
+						</td>
+					{% else %}
+						<td>{{ volume.title }}</td>
+					{% endif %}
 					<td><center>{{ form.n_chap }}</center></td>
 					<td>{{ form.title }}</td>
 					<td>{{ form.script }}</td>
@@ -46,7 +65,11 @@
 			</table>
 			<br />
 			<button type="submit">Guardar</button>
-			<input type="button" value="Volver" onclick="location.href='{% url 'chapter' manga.name %}'">
+			{% if volumeless %}
+				<input type="button" value="Volver" onclick="location.href='{% url 'chapter' manga.name %}'">
+			{% else %}
+				<input type="button" value="Volver" onclick="location.href='{% url 'vchapter' manga.name volume.n_vol %}'">
+			{% endif %}
 		</form>
 		{% endif %}
 	</body>

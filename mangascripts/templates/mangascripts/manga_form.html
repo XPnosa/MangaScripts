@@ -14,7 +14,13 @@
 					</tr>
 					<tr>
 						<td>{{ object.name }}</td>
-						<td>{{ form.author }}</td>
+							{% if not object.protected %}
+								<td>{{ form.author }}</td>
+							{% else %}
+								<td>{{ object.author }}</td>
+								<input id="author" type="hidden" name="author" value="{{ object.author }}">
+							{% endif %}
+						</td>
 						<td><center>{{ form.favorite }}</center></td>
 					</tr>
 				</table>
