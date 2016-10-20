@@ -14,6 +14,10 @@ scrap &lt;nombre manga&gt;
 
 **Changelog**
 
+- v1.5: 
+	- Añadida la opción de marcar un capítulo como traducido
+	- Correcciones en el script de scrap
+	- Otros ajustes menores
 - v1.4: 
 	- Añadido el Changelog
 	- Ajustes menores

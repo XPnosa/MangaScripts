@@ -7,6 +7,7 @@ import requests, bs4, time, sys, re
 # Constantes
 TAG_RE = re.compile(r'<[^>]+>')
 AUX_RE = re.compile(r'ngd[^>]+o')
+NOT_AVAILABLE = "No disponible"
 
 # Variables
 debug = False
@@ -66,7 +67,7 @@ class ScrapOP:
 					n_chp = sub_e[ini:sub_e.find('">',ini)]
 					sub_e = sub_e[sub_e.find('">',ini):]
 					name_chp = remove_tags(sub_e[2:sub_e.find('</a>')]).strip(" '") 
-					self.__chapters.append({"n_chp":n_chp, "title":name_chp, "volume":n_vol, "script":"No disponible"})
+					self.__chapters.append({"n_chp":n_chp, "title":name_chp, "volume":n_vol, "script":NOT_AVAILABLE})
 
 	# Obtener la lista de scripts de traducción de la web
 	def __get_scripts(self):
@@ -77,7 +78,7 @@ class ScrapOP:
 			try:
 				aux = Chapter.objects.get(volume__manga__name=self.__manga, n_chap=int(page))
 				sc = aux.script
-				if sc == "No disponible":
+				if sc == NOT_AVAILABLE:
 					new = True
 			except:
 				new = True
@@ -115,12 +116,15 @@ class ScrapOP:
 				try:
 					v = Volume.objects.get(manga__name=self.__manga, n_vol=chap["volume"])
 					try:
-						v.chapter_set.create(n_chap=chap["n_chp"], title=chap["title"], script=chap["script"], read=False, protected=True)
+						if chap["script"] == NOT_AVAILABLE:
+							v.chapter_set.create(n_chap=chap["n_chp"], title=chap["title"], script=chap["script"], read=False, protected=False, translated=False)
+						else:
+							v.chapter_set.create(n_chap=chap["n_chp"], title=chap["title"], script=chap["script"], read=False, protected=True, translated=True)
 					except:
 						c = Chapter.objects.get(volume__manga__name=self.__manga, n_chap=chap["n_chp"])
-						if c.script == "No disponible" and chap["script"] != "No disponible":
+						if not c.protected and c.script == NOT_AVAILABLE and chap["script"] != NOT_AVAILABLE:
 							c.delete()
-							v.chapter_set.create(n_chap=chap["n_chp"], title=chap["title"], script=chap["script"], read=False, protected=True)
+							v.chapter_set.create(n_chap=chap["n_chp"], title=chap["title"], script=chap["script"], read=False, protected=True, translated=True)
 						else:
 							raise
 					print "\033[1m\033[32mChapter → ("+str(chap["volume"])+", "+str(chap['n_chp'])+", "+chap['title']+", "+str(len(chap["script"]))+" characters)\033[0m"
@@ -135,8 +139,9 @@ class ScrapOP:
 		finally:
 			print "\033[1m\nLa base de datos ha sido actualizada.\n\033[0m"
 
+#Comando
 class Command(BaseCommand):
-	help = 'Busca y puebla la base de datos con scripts de One Piece'
+	help = 'Busca y puebla con scripts de traducción la base de datos de mangas'
 
 	def add_arguments(self, parser):
 		parser.add_argument('manga', nargs='+', type=str)

@@ -27,7 +27,8 @@
 					<th>Capítulo</th>
 					<th>Título</th>
 					<th>Script</th>
-					<th>Leído</th>
+					<th width="100px"><center>Traducido</center></th>
+					<th width="100px"><center>Leído</center></th>
 				</tr>
 				{% for chapter in object_list %}
 				<tr>
@@ -39,6 +40,13 @@
 								<img src='{% static "mangascripts/images/go.png" %}' width="24px" alt="Ver script" title="Ver script"/>
 							</a>
 						</center>
+					</td>
+					<td class="img_cell">
+						{% if chapter.translated %}
+							<center><img src='{% static "mangascripts/images/O.png" %}' width="24px" alt="Si" title="Si"/></center>
+						{% else %}
+							<center><img src='{% static "mangascripts/images/X.png" %}' width="24px" alt="No" title="No"/></center>
+						{% endif %}
 					</td>
 					<td class="img_cell">
 						{% if chapter.read %}

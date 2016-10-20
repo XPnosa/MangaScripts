@@ -43,6 +43,7 @@ class Chapter(models.Model):
 	read = models.BooleanField(default=False)
 	favorite = models.BooleanField(default=False)
 	protected = models.BooleanField(default=False)
+	translated = models.BooleanField(default=False)
 	def __str__(self):
 		return str(self.volume.manga.name) + " > Vol." + str(self.volume.n_vol) + " > Cap." + str(self.n_chap)
 	def get_chap(self):

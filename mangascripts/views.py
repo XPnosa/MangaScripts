@@ -139,7 +139,7 @@ class VolumeDelete(DeleteView):
 
 class ChapterAdd(CreateView):
 	model = Chapter
-	fields = ['volume','n_chap','title', 'script']
+	fields = ['volume','n_chap','title', 'script', 'translated']
 
 	def get_queryset(self):
 		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
@@ -156,7 +156,7 @@ class ChapterAdd(CreateView):
 
 class VChapterAdd(CreateView):
 	model = Chapter
-	fields = ['volume','n_chap','title', 'script']
+	fields = ['volume','n_chap','title', 'script', 'translated']
 
 	def get_queryset(self):
 		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
@@ -172,7 +172,7 @@ class VChapterAdd(CreateView):
 
 class ChapterUpdate(UpdateView):
 	model = Chapter
-	fields = ['title','script','read','favorite']
+	fields = ['title','script','read','favorite', 'translated']
 
 	def get_queryset(self):
 		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])

@@ -11,19 +11,23 @@
 						<th>Capítulo</th>
 						<th>Título</th>
 						<th>Script</th>
+						<th>Traducido</th>
 						<th>Leído</th>
 						<th>Favorito</th>
 					</tr>
 					<tr>
 						<td><center>{{ object.n_chap }}</center></td>
 						{% if not object.protected %}
-						<td>{{ form.title }}</td>
-						<td>{{ form.script }}</td>
+							<td>{{ form.title }}</td>
+							<td>{{ form.script }}</td>
+							<td><center>{{ form.translated }}</center></td>
 						{% else %}
 							<td>{{ object.title }}</td>
 							<input id="title" type="hidden" name="title" value="{{ object.title }}">
 							<td>Protegido</td>
 							<input id="script" type="hidden" name="script" value="{{ object.script }}">
+							<td><center>{{ object.translated }}</center></td>
+							<input id="title" type="hidden" name="title" value="{{ object.translated }}">
 						{% endif %}
 						<td><center>{{ form.read }}</center></td>
 						<td><center>{{ form.favorite }}</center></td>
@@ -45,6 +49,7 @@
 					<th>Capítulo</th>
 					<th>Título</th>
 					<th>Script</th>
+					<th>Traducido</th>
 				</tr>
 				<tr>
 					{% if volumeless %}
@@ -61,6 +66,7 @@
 					<td><center>{{ form.n_chap }}</center></td>
 					<td>{{ form.title }}</td>
 					<td>{{ form.script }}</td>
+					<td><center>{{ form.translated }}</center></td>
 				</tr>
 			</table>
 			<br />
