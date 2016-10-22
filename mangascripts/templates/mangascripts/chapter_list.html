@@ -64,6 +64,7 @@
 							{% endif %}
 						</center>
 					</td>
+					{% if not volume %}
 					<td class="img_cell">
 						<center>
 							<a href="{% url 'chapter-edit' manga.name chapter.n_chap chapter.pk %}">
@@ -78,6 +79,22 @@
 							</a>
 						</center>
 					</td>
+					{% else %}
+					<td class="img_cell">
+						<center>
+							<a href="{% url 'vchapter-edit' manga.name volume.n_vol chapter.n_chap chapter.pk %}">
+								<img src='{% static "mangascripts/images/edit.gif" %}' width="24px" alt="Editar Volumen" title="Editar Volumen"/>
+							</a>
+						</center>
+					</td>
+					<td class="img_cell">
+						<center>
+							<a href="{% url 'vchapter-del' manga.name volume.n_vol chapter.n_chap chapter.pk %}">
+								<img src='{% static "mangascripts/images/del.gif" %}' width="24px" alt="Eliminar Capítulo" title="Eliminar Capítulo"/>
+							</a>
+						</center>
+					</td>
+					{% endif %}
 					<td class="img_cell">
 						<center>
 							{% if chapter.protected %}<img src='{% static "mangascripts/images/pro.png" %}' width="24px" alt="Protegido" title="Protegido"/>{% endif %}
@@ -86,6 +103,22 @@
 				</tr>
 				{% endfor %}
 			</table>
+			{% if not favorite %}
+			<br />
+			<div class="pagination">
+				<span class="step-links">
+					{% if page_obj.has_previous %}
+						<a class="mylink" href="?page={{ page_obj.previous_page_number }}">[&lt;&lt;]</a>
+					{% endif %}
+					<strong class="current">
+						Página {{ page_obj.number }} de {{ paginator.num_pages }}
+					</strong>
+					{% if page_obj.has_next %}
+						<a class="mylink" href="?page={{ page_obj.next_page_number }}">[&gt;&gt;]</a>
+					{% endif %}
+				</span>
+			</div>
+			{% endif %}
 		{% else %}
 			<h3>No hay volúmenes disponibles</h3>
 		{% endif %}

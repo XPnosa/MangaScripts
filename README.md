@@ -14,6 +14,10 @@ scrap &lt;nombre manga&gt;
 
 **Changelog**
 
+- v1.6: 
+	- Añadida página de login
+	- Mejoras en el sistema de redirecciones
+	- Ajustes menores en plantillas
 - v1.5: 
 	- Añadida la opción de marcar un capítulo como traducido
 	- Correcciones en el script de scrap

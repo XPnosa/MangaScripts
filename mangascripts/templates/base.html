@@ -7,6 +7,23 @@
 </head>
 <body>
 	<a href="{% url 'manga' %}"><img class="logo" src="{% static 'images/sitelogo.png' %}" alt="Logo" title="Índice de Mangas" /></a>
+	{% if request.path != "/accounts/login/" and request.path != "/login/" %}
+	<div class="login">
+		<strong>
+		Bienvenido, 
+		{% if user.is_authenticated %}
+			{% if user.first_name and user.last_name %}
+				{{ user.first_name }} {{ user.last_name }}.
+			{% else %}
+				{{ user.username }}.
+			{% endif %}
+			 ( <a class="mylink" href="{% url 'logout_view' %}">Logout</a> )
+		{% else %}
+			Usuario Anonimo. ( <a class="mylink" href="/accounts/login/?next=/">Login</a> )
+		{% endif %}
+		</strong>
+	</div>
+	{% endif %}
 	{% block content %}{% endblock %}
 </body>
 </html>

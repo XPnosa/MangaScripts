@@ -35,7 +35,11 @@
 				</table>
 				<br />
 				<button type="submit">Guardar</button>
-				<input type="button" value="Volver" onclick="location.href='{% url 'chapter' manga.name %}'">
+				{% if volumeless %}
+					<input type="button" value="Volver" onclick="location.href='{% url 'chapter' manga.name %}'">
+				{% else %}
+					<input type="button" value="Volver" onclick="location.href='{% url 'vchapter' manga.name volume.n_vol %}'">
+				{% endif %}
 			</form>
 		{% else %}
 		<form enctype="multipart/form-data" method="post">

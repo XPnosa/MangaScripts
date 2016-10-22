@@ -48,8 +48,8 @@ class Chapter(models.Model):
 		return str(self.volume.manga.name) + " > Vol." + str(self.volume.n_vol) + " > Cap." + str(self.n_chap)
 	def get_chap(self):
 		return self.n_chap
-	def get_absolute_url(self):
-		return reverse('chapter', kwargs={'manga_name':self.volume.manga.name})
+	#def get_absolute_url(self):
+		#return reverse('chapter', kwargs={'manga_name':self.volume.manga.name})
 	class Meta:
 		unique_together = ('volume', 'n_chap')
 		ordering = ["n_chap"]
