@@ -4,11 +4,6 @@
 	<h2>Lista de Volúmenes</h2>
 	<body>
 		<input type="button" value="Nuevo Volumen" onclick="location.href='{% url 'volume-new' manga.name %}'">
-		{% if not favorite %}
-			<input type="button" value="Ver Favoritos" onclick="location.href='{% url 'volume_fav' manga.name %}'">
-		{% else %}
-			<input type="button" value="Ver Todos" onclick="location.href='{% url 'volume' manga.name %}'">
-		{% endif %}
 		{% if object_list %}
 			<input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
 			<br /><br />
@@ -16,19 +11,19 @@
 				<tr>
 					<th>Volumen</th>
 					<th>Título</th>
-					<th colspan="2">Capítulos</th>
+					<th>Capítulos</th>
 				</tr>
 				{% for volume in object_list %}
 				<tr>
 					<td><center>{{ volume.n_vol }}</center></td>
 					<td>{{ volume.title }}</td>
-					<td class="img_cell">
+					<!--<td class="img_cell">
 						<center>
 							<a href="{% url 'vchapter-new' manga.name volume.n_vol %}">
 								<img src='{% static "mangascripts/images/new.gif" %}' width="24px" alt="Nuevo capítulo" title="Nuevo capítulo"/>
 							</a>
 						</center>
-					</td>
+					</td>-->
 					<td class="img_cell">
 						<center>
 							<a href="{% url 'vchapter' manga.name volume.n_vol %}">
@@ -36,38 +31,36 @@
 							</a>
 						</center>
 					</td>
-					<td class="img_cell">
-						<center>
-							{% if volume.favorite %}
-								<img src='{% static "mangascripts/images/fav.png" %}' width="24px" alt="Favorito" title="Favorito"/>
-							{% else %}
-								<img src='{% static "mangascripts/images/nfv.png" %}' width="24px" alt="No favorito" title="No favorito"/>
-							{% endif %}
-						</center>
-					</td>
-					<td class="img_cell">
-						<center>
-							<a href="{% url 'volume-edit' manga.name volume.n_vol volume.pk %}">
-								<img src='{% static "mangascripts/images/edit.gif" %}' width="24px" alt="Editar Volumen" title="Editar Volumen"/>
-							</a>
-						</center>
-					</td>
-					<td class="img_cell">
-						<center>
-							<a href="{% url 'volume-del' manga.name volume.n_vol volume.pk %}">
-								<img src='{% static "mangascripts/images/del.gif" %}' width="24px" alt="Eliminar Volumen" title="Eliminar Volumen"/>
-							</a>
-						</center>
-					</td>
-					<td class="img_cell">
-						<center>
-							{% if volume.protected %}<img src='{% static "mangascripts/images/pro.png" %}' width="24px" alt="Protegido" title="Protegido"/>{% endif %}
-						</center>
-					</td>
+					{% if user.is_authenticated %}
+						<!--<td class="img_cell">
+							<center>
+								{% if False %}
+									<img src='{% static "mangascripts/images/fav.png" %}' width="24px" alt="Favorito" title="Favorito"/>
+								{% else %}
+									<img src='{% static "mangascripts/images/nfv.png" %}' width="24px" alt="No favorito" title="No favorito"/>
+								{% endif %}
+							</center>
+						</td>-->
+						{% if user.pk == volume.user %}
+							<td class="img_cell">
+								<center>
+									<a href="{% url 'volume-edit' manga.name volume.n_vol volume.pk %}">
+										<img src='{% static "mangascripts/images/edit.gif" %}' width="24px" alt="Editar Volumen" title="Editar Volumen"/>
+									</a>
+								</center>
+							</td>
+							<td class="img_cell">
+								<center>
+									<a href="{% url 'volume-del' manga.name volume.n_vol volume.pk %}">
+										<img src='{% static "mangascripts/images/del.gif" %}' width="24px" alt="Eliminar Volumen" title="Eliminar Volumen"/>
+									</a>
+								</center>
+							</td>
+						{% endif %}
+					{% endif %}
 				</tr>
 				{% endfor %}
 			</table>
-			{% if not favorite %}
 			<br />
 			<div class="pagination">
 				<span class="step-links">
@@ -82,7 +75,6 @@
 					{% endif %}
 				</span>
 			</div>
-			{% endif %}
 		{% else %}
 			<h3>No hay volúmenes disponibles</h3>
 		{% endif %}

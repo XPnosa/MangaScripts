@@ -65,11 +65,11 @@ class VChapterListView(ListView):
 
 class MangaAdd(CreateView):
 	model = Manga
-	fields = ['name','author']
+	fields = ['name','author','user']
 
 class MangaUpdate(UpdateView):
 	model = Manga
-	fields = ['author','favorite']
+	fields = ['author']
 
 	def get_queryset(self):
 		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
@@ -97,7 +97,7 @@ class MangaDelete(DeleteView):
 
 class VolumeAdd(CreateView):
 	model = Volume
-	fields = ['manga','n_vol','title']
+	fields = ['manga','n_vol','title','user']
 
 	def get_queryset(self):
 		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
@@ -111,7 +111,7 @@ class VolumeAdd(CreateView):
 
 class VolumeUpdate(UpdateView):
 	model = Volume
-	fields = ['title','favorite']
+	fields = ['title']
 
 	def get_queryset(self):
 		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
@@ -126,8 +126,8 @@ class VolumeDelete(DeleteView):
 	model = Volume
 	#success_url = reverse_lazy('manga')
 
-	def get_success_url(self, **kwargs):         
-		return reverse_lazy('volume', kwargs = {'manga_name': self.name})
+	def get_success_url(self, **kwargs):
+		return reverse_lazy('volume', kwargs = {'manga_name': self.manga.name})
 
 	def get_manga(self):
 		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
@@ -147,7 +147,7 @@ class VolumeDelete(DeleteView):
 
 class ChapterAdd(CreateView):
 	model = Chapter
-	fields = ['volume','n_chap','title', 'script', 'translated']
+	fields = ['volume','n_chap','title','script','translated','user']
 
 	def get_success_url(self, **kwargs):
 		return reverse_lazy('chapter', kwargs = {'manga_name': self.get_manga().name})
@@ -171,7 +171,7 @@ class ChapterAdd(CreateView):
 
 class VChapterAdd(CreateView):
 	model = Chapter
-	fields = ['volume','n_chap','title', 'script', 'translated']
+	fields = ['volume','n_chap','title', 'script', 'translated','user']
 
 	def get_success_url(self, **kwargs):
 		return reverse_lazy('vchapter', kwargs = {'manga_name': self.get_manga().name, 'volume_n_vol':self.get_volume().n_vol})
@@ -199,7 +199,7 @@ class VChapterAdd(CreateView):
 
 class ChapterUpdate(UpdateView):
 	model = Chapter
-	fields = ['title','script','read','favorite', 'translated']
+	fields = ['title','script','translated']
 
 	def get_success_url(self, **kwargs):
 		return reverse_lazy('chapter', kwargs = {'manga_name': self.get_manga().name})
@@ -222,7 +222,7 @@ class ChapterUpdate(UpdateView):
 
 class VChapterUpdate(UpdateView):
 	model = Chapter
-	fields = ['title','script','read','favorite', 'translated']
+	fields = ['title','script','translated']
 
 	def get_success_url(self, **kwargs):
 		return reverse_lazy('vchapter', kwargs = {'manga_name': self.get_manga().name, 'volume_n_vol':self.get_volume().n_vol})
@@ -254,7 +254,7 @@ class ChapterDelete(DeleteView):
 	#success_url = reverse_lazy('manga')
 
 	def get_success_url(self, **kwargs):
-		return reverse_lazy('chapter', kwargs = {'manga_name': self.manga})
+		return reverse_lazy('chapter', kwargs = {'manga_name': self.volume.manga.name})
 
 	def get_manga(self):
 		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
@@ -329,31 +329,37 @@ def vchapter(request, manga_name, volume_n_vol):
 	context = {"manga":manga, "chapter_list" : chapter_list}
 	return render(request, 'mangascripts/vchapter.html', context)
 
+@login_required(login_url='/accounts/login/')
 def script(request, manga_name, chapter_n_chap):
 	manga = get_object_or_404(Manga, name=manga_name)
 	chapter = Chapter.objects.get(volume__manga__name=manga_name, n_chap=chapter_n_chap)
-	context = {'manga': manga, "chapter" : chapter}
+	context = {'manga': manga, "chapter": chapter}
 	return render(request, 'mangascripts/script.html', context)
 
 @login_required(login_url='/accounts/login/')
-def manga_fav(request):
-	manga_list = Manga.objects.filter(favorite=True).order_by('name')
-	context = {'object_list': manga_list, 'favorite':True}
-	return render(request, 'mangascripts/manga_list.html', context)
-
-@login_required(login_url='/accounts/login/')
-def volume_fav(request, manga_name):
+def vscript(request, manga_name, chapter_n_chap, volume_n_vol):
 	manga = get_object_or_404(Manga, name=manga_name)
-	volume_list = Volume.objects.filter(manga=manga.pk, favorite=True).order_by('n_vol')
-	context = {'manga': manga, 'object_list': volume_list, 'favorite':True}
-	return render(request, 'mangascripts/volume_list.html', context)
+	chapter = Chapter.objects.get(volume__manga__name=manga_name, n_chap=chapter_n_chap)
+	volume = Volume.objects.get(manga__name=manga_name, n_vol=volume_n_vol)
+	context = {'manga': manga, 'volume': volume, "chapter": chapter,}
+	return render(request, 'mangascripts/script.html', context)
 
-@login_required(login_url='/accounts/login/')
-def chapter_fav(request, manga_name):
-	manga = get_object_or_404(Manga, name=manga_name)
-	chapter_list = Chapter.objects.filter(volume__manga__name=manga_name, favorite=True).order_by('n_chap')
-	context = {'manga': manga, 'object_list': chapter_list, 'favorite':True}
-	return render(request, 'mangascripts/chapter_list.html', context)
+#def manga_fav(request):
+	#manga_list = Manga.objects.filter(favorite=True).order_by('name')
+	#context = {'object_list': manga_list, 'favorite':True}
+	#return render(request, 'mangascripts/manga_list.html', context)
+
+#def volume_fav(request, manga_name):
+	#manga = get_object_or_404(Manga, name=manga_name)
+	#volume_list = Volume.objects.filter(manga=manga.pk, favorite=True).order_by('n_vol')
+	#context = {'manga': manga, 'object_list': volume_list, 'favorite':True}
+	#return render(request, 'mangascripts/volume_list.html', context)
+
+#def chapter_fav(request, manga_name):
+	#manga = get_object_or_404(Manga, name=manga_name)
+	#chapter_list = Chapter.objects.filter(volume__manga__name=manga_name, favorite=True).order_by('n_chap')
+	#context = {'manga': manga, 'object_list': chapter_list, 'favorite':True}
+	#return render(request, 'mangascripts/chapter_list.html', context)
 
 def login(request):
 	pass

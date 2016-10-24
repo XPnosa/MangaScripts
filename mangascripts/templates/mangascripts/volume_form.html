@@ -3,52 +3,55 @@
 {% block content %}
 	<h2>Edición de Volúmenes</h2>
 	<body>
-		{% if object %}
+		{% if user.is_authenticated %}
+			{% if object %}
+				<form enctype="multipart/form-data" method="post">
+					{% csrf_token %}
+					<table>
+						<tr>
+							<th>Manga</th>
+							<th>Volumen</th>
+							<th>Título</th>
+						</tr>
+						<tr>
+							<td>{{ object.manga }}</td>
+							<td><center>{{ object.n_vol }}</center></td>
+							{% if user.pk == object.user %}
+								<td>{{ form.title }}</td>
+							{% else %}
+								<td>{{ object.title }}</td>
+								<input id="title" type="hidden" name="title" value="{{ object.title }}">
+							{% endif %}
+						</tr>
+					</table>
+					<br />
+					<button type="submit">Guardar</button>
+					<input type="button" value="Volver" onclick="location.href='{% url 'volume' manga.name %}'">
+				</form>
+			{% else %}
 			<form enctype="multipart/form-data" method="post">
 				{% csrf_token %}
+				<input id="user" type="hidden" name="user" value="{{ user.pk }}">
+				<input id="manga" type="hidden" name="manga" value="{{ manga.pk }}">
 				<table>
 					<tr>
 						<th>Manga</th>
 						<th>Volumen</th>
 						<th>Título</th>
-						<th>Favorito</th>
 					</tr>
 					<tr>
-						<td>{{ object.manga }}</td>
-						<td><center>{{ object.n_vol }}</center></td>
-						{% if not object.protected %}
-							<td>{{ form.title }}</td>
-						{% else %}
-							<td>{{ object.title }}</td>
-							<input id="title" type="hidden" name="title" value="{{ object.title }}">
-						{% endif %}
-						<td><center>{{ form.favorite }}</center></td>
+						<td>{{ manga.name }}</td>
+						<td><center>{{ form.n_vol }}</center></td>
+						<td>{{ form.title }}</td>
 					</tr>
 				</table>
 				<br />
 				<button type="submit">Guardar</button>
 				<input type="button" value="Volver" onclick="location.href='{% url 'volume' manga.name %}'">
 			</form>
+			{% endif %}
 		{% else %}
-		<form enctype="multipart/form-data" method="post">
-			{% csrf_token %}
-			<input id="manga" type="hidden" name="manga" value="{{ manga.pk }}">
-			<table>
-				<tr>
-					<th>Manga</th>
-					<th>Volumen</th>
-					<th>Título</th>
-				</tr>
-				<tr>
-					<td>{{ manga.name }}</td>
-					<td><center>{{ form.n_vol }}</center></td>
-					<td>{{ form.title }}</td>
-				</tr>
-			</table>
-			<br />
-			<button type="submit">Guardar</button>
-			<input type="button" value="Volver" onclick="location.href='{% url 'volume' manga.name %}'">
-		</form>
+			<h3>No esta autorizado para ver esta página</h3>
 		{% endif %}
 	</body>
 {% endblock %}

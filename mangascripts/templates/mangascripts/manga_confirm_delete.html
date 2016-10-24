@@ -3,18 +3,22 @@
 {% block content %}
 	<h2>Eliminar Manga</h2>
 	<body>
-		{% if not object.protected %}
-		<form action="" method="post">
-				{% csrf_token %}
-				¿Esta seguro de que desea eliminar el manga "{{ object.name }}"?<br />
-				(Se eliminarán todos los volúmenes y capítulos asociados al mismo)
-				<br /><br />
-				<button type="submit">Confirmar</button>
-				<input type="button" value="Cancelar" onclick="location.href='{% url 'manga' %}'">
-			</form>
+		{% if user.is_authenticated %}
+			{% if user.pk == object.user %}
+			<form action="" method="post">
+					{% csrf_token %}
+					¿Esta seguro de que desea eliminar el manga "{{ object.name }}"?<br />
+					(Se eliminarán todos los volúmenes y capítulos asociados al mismo)
+					<br /><br />
+					<button type="submit">Confirmar</button>
+					<input type="button" value="Cancelar" onclick="location.href='{% url 'manga' %}'">
+				</form>
+			{% else %}
+				No se puede eliminar el manga "{{ object.name }}" porque está protegido
+				<br /><br /><input type="button" value="Cancelar" onclick="location.href='{% url 'manga' %}'">
+			{% endif %}
 		{% else %}
-			No se puede eliminar el manga "{{ object.name }}" porque está protegido
-			<br /><br /><input type="button" value="Cancelar" onclick="location.href='{% url 'manga' %}'">
+			<h3>No esta autorizado para ver esta página</h3>
 		{% endif %}
 	</body>
 {% endblock %}

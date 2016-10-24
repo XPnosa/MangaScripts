@@ -14,6 +14,12 @@ scrap &lt;nombre manga&gt;
 
 **Changelog**
 
+- v1.7: 
+	- Mejoras en las restricciones para poder ver/crear/modificar/eliminar un manga/volumen/capítulo
+	- Eliminada temporalmente la opción de poder marcar mangas/volúmenes/capítulos como favoritos
+	- Eliminada temporalmente la opción de poder filtrar mangas/volúmenes/capítulos por favoritos
+	- Eliminada temporalmente la opción de poder marcar un capítulo como leído
+	- Otros ajustes en el modelo, vistas, plantillas y en el script de scrap
 - v1.6: 
 	- Añadida página de login
 	- Mejoras en el sistema de redirecciones

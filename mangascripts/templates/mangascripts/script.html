@@ -2,20 +2,24 @@
 {% load static %}
 {% block content %}
 	<h2>Script del capítulo</h2>
-	<input type="button" value="Editar" onclick="location.href='{% url 'chapter-edit' manga.name chapter.n_chap chapter.pk %}'">
-	<input type="button" value="Volver" onclick="location.href='{% url 'chapter' manga.name %}'">
+	{% if user.is_authenticated and user.pk == chapter.user %}
+		{% if not volume %}
+			<input type="button" value="Editar Capítulo" onclick="location.href='{% url 'chapter-edit' manga.name chapter.n_chap chapter.pk %}'">
+		{% else %}
+			<input type="button" value="Editar Capítulo" onclick="location.href='{% url 'vchapter-edit' manga.name volume.n_vol chapter.n_chap chapter.pk %}'">
+		{% endif %}
+	{% endif %}
+	{% if not volume %}
+		<input type="button" value="Volver" onclick="location.href='{% url 'chapter' manga.name %}'">
+	{% else %}
+		<input type="button" value="Volver" onclick="location.href='{% url 'vchapter' manga.name volume.n_vol %}'">
+	{% endif %}
 	<br /><br />
 	<body>
 		{% if chapter %}
 			<table>
 				<tr>
-					<th>{{ chapter.title }}
-						{% if chapter.read %}
-							<img class="right-align" src='{% static "mangascripts/images/O.png" %}' width="24px" alt="Leído" title="Leído"/>
-						{% else %}
-							<img class="right-align" src='{% static "mangascripts/images/X.png" %}' width="24px" alt="No leído" title="No leído"/>
-						{% endif %}
-					</th>
+					<th>{{ chapter.title }}</th>
 				</tr>
 				<tr>
 					<td>{{ chapter.script|safe }}</td>

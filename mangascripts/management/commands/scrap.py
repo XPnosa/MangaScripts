@@ -8,6 +8,7 @@ import requests, bs4, time, sys, re
 TAG_RE = re.compile(r'<[^>]+>')
 AUX_RE = re.compile(r'ngd[^>]+o')
 NOT_AVAILABLE = "No disponible"
+SCRAP_USER = 7
 
 # Variables
 debug = False
@@ -39,7 +40,7 @@ class ScrapOP:
 			m = Manga.objects.get(name=self.__manga)
 			self.__first = False
 		except:
-			m = Manga(name=self.__manga, author=self.__author, protected=True)
+			m = Manga(name=self.__manga, author=self.__author, user=SCRAP_USER)
 			m.save()
 		finally: 
 			return m
@@ -106,7 +107,7 @@ class ScrapOP:
 				print "\033[1m\033[31mManga → ("+self.__manga+", "+self.__author+")\033[0m"
 			for vol in self.__volumes:
 				try:
-					self.__dbObj.volume_set.create(n_vol=vol['n_vol'], title=vol['title'], protected=True)
+					self.__dbObj.volume_set.create(n_vol=vol['n_vol'], title=vol['title'], user=SCRAP_USER)
 					print "\033[1m\033[32mVolume → ("+self.__manga+", "+str(vol['n_vol'])+", "+vol['title']+")\033[0m"
 				except:
 					print "\033[1m\033[31mVolume → ("+self.__manga+", "+str(vol['n_vol'])+", "+vol['title']+")\033[0m"
@@ -117,14 +118,14 @@ class ScrapOP:
 					v = Volume.objects.get(manga__name=self.__manga, n_vol=chap["volume"])
 					try:
 						if chap["script"] == NOT_AVAILABLE:
-							v.chapter_set.create(n_chap=chap["n_chp"], title=chap["title"], script=chap["script"], read=False, protected=False, translated=False)
+							v.chapter_set.create(n_chap=chap["n_chp"], title=chap["title"], script=chap["script"], translated=False, user=SCRAP_USER)
 						else:
-							v.chapter_set.create(n_chap=chap["n_chp"], title=chap["title"], script=chap["script"], read=False, protected=True, translated=True)
+							v.chapter_set.create(n_chap=chap["n_chp"], title=chap["title"], script=chap["script"], translated=True, user=SCRAP_USER)
 					except:
 						c = Chapter.objects.get(volume__manga__name=self.__manga, n_chap=chap["n_chp"])
 						if not c.protected and c.script == NOT_AVAILABLE and chap["script"] != NOT_AVAILABLE:
 							c.delete()
-							v.chapter_set.create(n_chap=chap["n_chp"], title=chap["title"], script=chap["script"], read=False, protected=True, translated=True)
+							v.chapter_set.create(n_chap=chap["n_chp"], title=chap["title"], script=chap["script"], translated=True, user=SCRAP_USER)
 						else:
 							raise
 					print "\033[1m\033[32mChapter → ("+str(chap["volume"])+", "+str(chap['n_chp'])+", "+chap['title']+", "+str(len(chap["script"]))+" characters)\033[0m"
