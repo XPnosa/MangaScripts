@@ -41,4 +41,5 @@ urlpatterns = [
 	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/volume-(?P<volume_n_vol>[0-9]+)/chapter-(?P<chapter_n_chap>[0-9]+)/script$', views.vscript, name='vscript'),
 	url(r'^accounts/login/$', views.login, name='login'),
 	url(r'^logout$', views.logout_view, name='logout_view'),
+	url(r'^logout_redirect$', views.logoutr, name='logoutr'),
 ]

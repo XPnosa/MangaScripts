@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.contrib.auth.models import User
 from django.urls import reverse, reverse_lazy
 from django.core.validators import MinValueValidator, MaxValueValidator
 
@@ -10,7 +11,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 class Manga(models.Model):
 	name = models.CharField(max_length=100)
 	author = models.CharField(max_length=100)
-	user = models.IntegerField()
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	def __str__(self):
 		return str(self.name)
 	def get_absolute_url(self):
@@ -24,7 +25,7 @@ class Volume(models.Model):
 	manga = models.ForeignKey(Manga, on_delete=models.CASCADE)
 	n_vol = models.IntegerField(default=0, validators=[MinValueValidator(0)])
 	title = models.CharField(max_length=200)
-	user = models.IntegerField()
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	def __str__(self):
 		return str(self.manga.name) + " > Vol." + str(self.n_vol)
 	def get_absolute_url(self):
@@ -39,7 +40,7 @@ class Chapter(models.Model):
 	n_chap = models.IntegerField(default=0, validators=[MinValueValidator(0)])
 	title = models.CharField(max_length=200)
 	script = models.TextField()
-	user = models.IntegerField()
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	translated = models.BooleanField(default=False)
 	def __str__(self):
 		return str(self.volume.manga.name) + " > Vol." + str(self.volume.n_vol) + " > Cap." + str(self.n_chap)

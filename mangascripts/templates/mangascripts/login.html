@@ -26,6 +26,7 @@
 	</table>
 	<br />
 	<input type="submit" value="Login" />
+	<input type="button" value="Volver" onclick="location.href='javascript:history.back(-1)'">
 	<input type="hidden" name="next" value="{{ next }}" />
 	</form>
 	{# Assumes you setup the password_reset view in your URLconf #}

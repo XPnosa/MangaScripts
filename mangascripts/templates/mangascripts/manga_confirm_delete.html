@@ -4,7 +4,7 @@
 	<h2>Eliminar Manga</h2>
 	<body>
 		{% if user.is_authenticated %}
-			{% if user.pk == object.user %}
+			{% if user.pk == object.user.pk %}
 			<form action="" method="post">
 					{% csrf_token %}
 					¿Esta seguro de que desea eliminar el manga "{{ object.name }}"?<br />

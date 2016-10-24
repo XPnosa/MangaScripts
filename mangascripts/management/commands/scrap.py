@@ -1,14 +1,21 @@
 #-*- coding: utf-8 -*-
 
 from django.core.management.base import BaseCommand, CommandError
+from django.contrib.auth.models import User
 from mangascripts.models import Manga, Volume, Chapter
-import requests, bs4, time, sys, re
+import requests, random, bs4, time, sys, re
 
 # Constantes
 TAG_RE = re.compile(r'<[^>]+>')
 AUX_RE = re.compile(r'ngd[^>]+o')
 NOT_AVAILABLE = "No disponible"
-SCRAP_USER = 7
+
+try:
+	SCRAP_USER = User.objects.get(username='scrap')
+except:
+	sc_user = User(username='scrap', password='pasword.'+str(random.randint(1,1000000)))
+	sc_user.save()
+	SCRAP_USER = sc_user
 
 # Variables
 debug = False

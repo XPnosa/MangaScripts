@@ -254,7 +254,7 @@ class ChapterDelete(DeleteView):
 	#success_url = reverse_lazy('manga')
 
 	def get_success_url(self, **kwargs):
-		return reverse_lazy('chapter', kwargs = {'manga_name': self.volume.manga.name})
+		return reverse_lazy('chapter', kwargs = {'manga_name': self.manga.name})
 
 	def get_manga(self):
 		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
@@ -366,4 +366,7 @@ def login(request):
 
 def logout_view(request):
 	logout(request)
-	return redirect('/')
+	return redirect('/mangascripts/logout_redirect')
+
+def logoutr(request):
+	return render(request, 'mangascripts/logout.html')

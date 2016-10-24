@@ -14,7 +14,7 @@
 						</tr>
 						<tr>
 							<td>{{ object.name }}</td>
-								{% if user.pk == object.user %}
+								{% if user.pk == object.user.pk %}
 									<td>{{ form.author }}</td>
 								{% else %}
 									<td>{{ object.author }}</td>
@@ -48,6 +48,7 @@
 			{% endif %}
 		{% else %}
 			<h3>No esta autorizado para ver esta página</h3>
+			<input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
 		{% endif %}
 	</body>
 {% endblock %}

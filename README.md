@@ -14,6 +14,8 @@ scrap &lt;nombre manga&gt;
 
 **Changelog**
 
+- v1.8: 
+	- Correcciones en modelo, vistas, plantillas y en el script de scrap
 - v1.7: 
 	- Mejoras en las restricciones para poder ver/crear/modificar/eliminar un manga/volumen/capítulo
 	- Eliminada temporalmente la opción de poder marcar mangas/volúmenes/capítulos como favoritos

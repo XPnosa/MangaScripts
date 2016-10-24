@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 	<h2>Script del capítulo</h2>
-	{% if user.is_authenticated and user.pk == chapter.user %}
+	{% if user.is_authenticated and user.pk == chapter.user.pk %}
 		{% if not volume %}
 			<input type="button" value="Editar Capítulo" onclick="location.href='{% url 'chapter-edit' manga.name chapter.n_chap chapter.pk %}'">
 		{% else %}

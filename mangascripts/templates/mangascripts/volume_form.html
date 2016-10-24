@@ -16,7 +16,7 @@
 						<tr>
 							<td>{{ object.manga }}</td>
 							<td><center>{{ object.n_vol }}</center></td>
-							{% if user.pk == object.user %}
+							{% if user.pk == object.user.pk %}
 								<td>{{ form.title }}</td>
 							{% else %}
 								<td>{{ object.title }}</td>
@@ -52,6 +52,7 @@
 			{% endif %}
 		{% else %}
 			<h3>No esta autorizado para ver esta página</h3>
+			<input type="button" value="Volver" onclick="location.href='{% url 'volume' manga.name %}'">
 		{% endif %}
 	</body>
 {% endblock %}

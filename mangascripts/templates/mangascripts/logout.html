@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+	<h2>Logout</h2>
+	<p>Se ha desconectado correctamente</p>
+	<input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
+{% endblock %}

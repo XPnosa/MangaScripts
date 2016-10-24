@@ -16,7 +16,7 @@
 						</tr>
 						<tr>
 							<td><center>{{ object.n_chap }}</center></td>
-							{% if user.pk == object.user %}
+							{% if user.pk == object.user.pk %}
 								<td>{{ form.title }}</td>
 								<td>{{ form.script }}</td>
 								<td><center>{{ form.translated }}</center></td>
@@ -82,6 +82,11 @@
 			{% endif %}
 		{% else %}
 			<h3>No esta autorizado para ver esta página</h3>
+			{% if volumeless %}
+				<input type="button" value="Volver" onclick="location.href='{% url 'chapter' manga.name %}'">
+			{% else %}
+				<input type="button" value="Volver" onclick="location.href='{% url 'vchapter' manga.name volume.n_vol %}'">
+			{% endif %}
 		{% endif %}
 	</body>
 {% endblock %}
