@@ -24,4 +24,5 @@ urlpatterns = [
 	url(r'^$', RedirectView.as_view(url='/mangascripts/')),
 	url('^', include('django.contrib.auth.urls')),
 	url(r'^accounts/login/$', auth_views.login, {'template_name': 'mangascripts/login.html'}),
+	url(r'^accounts/profile/$', RedirectView.as_view(url='/mangascripts/')),
 ]

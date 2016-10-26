@@ -3,6 +3,9 @@ from mangascripts.views import MangaListView, VolumeListView, ChapterListView, V
 from mangascripts.views import MangaAdd, VolumeAdd, ChapterAdd, VChapterAdd
 from mangascripts.views import MangaUpdate, VolumeUpdate, ChapterUpdate, VChapterUpdate
 from mangascripts.views import MangaDelete, VolumeDelete, ChapterDelete, VChapterDelete
+from mangascripts.views import UserDetailView, UserUpdate
+from django.views.generic.edit import CreateView
+from django.contrib.auth.forms import UserCreationForm
 
 from . import views
 
@@ -28,6 +31,13 @@ urlpatterns = [
 	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/volume-(?P<volume_n_vol>[0-9]+)/del=(?P<pk>[0-9]+)$', VolumeDelete.as_view(), name='volume-del'),
 	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/chapter-(?P<chapter_n_chap>[0-9]+)/del=(?P<pk>[0-9]+)$', ChapterDelete.as_view(), name='chapter-del'),
 	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/volume-(?P<volume_n_vol>[0-9]+)/chapter-(?P<chapter_n_chap>[0-9]+)/del=(?P<pk>[0-9]+)$', VChapterDelete.as_view(), name='vchapter-del'),
+	# Filter
+	url(r'^favorites-mangas$', MangaListView.as_view(), name='favorites-mangas'),
+	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/favorites-volumes$', VolumeListView.as_view(), name='favorites-volumes'),
+	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/favorites-chapters$', ChapterListView.as_view(), name='favorites-chapters'),
+	# User
+	url(r'^user-details/user=(?P<pk>[0-9]+)$', UserDetailView.as_view(), name='user-details'),
+	url(r'^user-edit/user=(?P<pk>[0-9]+)$', UserUpdate.as_view(), name='user-edit'),
 
 	# No genericas
 	# url(r'^$', views.index, name='index'),
@@ -35,15 +45,12 @@ urlpatterns = [
 	# url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/chapters$', views.chapter, name='chapter'),
 	# url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/volume-(?P<volume_n_vol>[0-9]+)/chapters$', views.vchapter, name='vchapter'),
 	# Favs
-	# url(r'^favorites-manga$', views.manga_fav, name='manga_fav'),
-	# url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/favorites-volumes$', views.volume_fav, name='volume_fav'),
-	# url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/favorites-chapters$', views.chapter_fav, name='chapter_fav'),
-	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/fav=(?P<manga_pk>[0-9]+)?page=(?P<page>[0-9]+)$', views.manga_fav, name='manga-fav'),
-	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/unfav=(?P<manga_pk>[0-9]+)?page=(?P<page>[0-9]+)$', views.manga_unfav, name='manga-unfav'),
-	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/volume-(?P<volume_n_vol>[0-9]+)/fav=(?P<volume_pk>[0-9]+)?page=(?P<page>[0-9]+)$', views.volume_fav, name='volume-fav'),
-	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/volume-(?P<volume_n_vol>[0-9]+)/unfav=(?P<volume_pk>[0-9]+)?page=(?P<page>[0-9]+)$', views.volume_unfav, name='volume-unfav'),
-	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/chapter-(?P<chapter_n_chap>[0-9]+)/fav=(?P<chapter_pk>[0-9]+)?page=(?P<page>[0-9]+)$', views.chapter_fav, name='chapter-fav'),
-	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/chapter-(?P<chapter_n_chap>[0-9]+)/unfav=(?P<chapter_pk>[0-9]+)?page=(?P<page>[0-9]+)$', views.chapter_unfav, name='chapter-unfav'),
+	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/fav=(?P<manga_pk>[0-9]+)?page=(?P<page>[0-9]+)/(?P<favorites>(True|False))$', views.manga_fav, name='manga-fav'),
+	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/unfav=(?P<manga_pk>[0-9]+)?page=(?P<page>[0-9]+)/(?P<favorites>(True|False))$', views.manga_unfav, name='manga-unfav'),
+	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/volume-(?P<volume_n_vol>[0-9]+)/fav=(?P<volume_pk>[0-9]+)?page=(?P<page>[0-9]+)/(?P<favorites>(True|False))$', views.volume_fav, name='volume-fav'),
+	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/volume-(?P<volume_n_vol>[0-9]+)/unfav=(?P<volume_pk>[0-9]+)?page=(?P<page>[0-9]+)/(?P<favorites>(True|False))$', views.volume_unfav, name='volume-unfav'),
+	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/chapter-(?P<chapter_n_chap>[0-9]+)/fav=(?P<chapter_pk>[0-9]+)?page=(?P<page>[0-9]+)/(?P<favorites>(True|False))$', views.chapter_fav, name='chapter-fav'),
+	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/chapter-(?P<chapter_n_chap>[0-9]+)/unfav=(?P<chapter_pk>[0-9]+)?page=(?P<page>[0-9]+)/(?P<favorites>(True|False))$', views.chapter_unfav, name='chapter-unfav'),
 	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/volume-(?P<volume_n_vol>[0-9]+)/chapter-(?P<chapter_n_chap>[0-9]+)/fav=(?P<chapter_pk>[0-9]+)?page=(?P<page>[0-9]+)$', views.vchapter_fav, name='vchapter-fav'),
 	url(r'^(?P<manga_name>[a-zA-Z0-9 ]+)/volume-(?P<volume_n_vol>[0-9]+)/chapter-(?P<chapter_n_chap>[0-9]+)/unfav=(?P<chapter_pk>[0-9]+)?page=(?P<page>[0-9]+)$', views.vchapter_unfav, name='vchapter-unfav'),
 	# Read
@@ -66,4 +73,6 @@ urlpatterns = [
 	url(r'^accounts/login/$', views.login, name='login'),
 	url(r'^logout$', views.logout_view, name='logout_view'),
 	url(r'^logout_redirect$', views.logoutr, name='logoutr'),
+	url(r'^register$', views.register, name='register'),
+	url(r'^register_redirect$', views.register_redirect, name='register_redirect'),
 ]

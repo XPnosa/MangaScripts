@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+	<h2>{% if user == this_user %}Mi Perfil{% else %}Perfil de {{this_user.username}}{% endif %}</h2>
+	{% if user.is_authenticated %}
+		<div class="menu">
+			{% if user == this_user %}
+				<input type="button" value="Editar Perfil" onclick="location.href='{% url 'user-edit' user.pk %}'"><br /><br />
+			{% endif %}
+		</div>
+		<div class="profile">
+			<p><strong>Nombre</strong>: {% if this_user.first_name %}{{ this_user.first_name }}{% else %}?{% endif %}</p>
+			<p><strong>Apellidos</strong>: {% if this_user.last_name %}{{ this_user.last_name }}{% else %}?{% endif %}</p>
+			<p><strong>Correo</strong>: {% if this_user.email %}{{ this_user.email }}{% else %}?{% endif %}</p>
+		</div>
+		<div class="menu">
+			<br /><input type="button" value="Inicio" onclick="location.href='{% url 'manga' %}'">
+		</div>
+	{% else %}
+	<h3>No esta autorizado para ver esta página</h3>
+	<input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
+	{% endif %}
+{% endblock %}

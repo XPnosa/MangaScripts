@@ -1,11 +1,12 @@
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render, redirect
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render, redirect, render_to_response 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.urls import reverse, reverse_lazy
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib.auth.forms import UserCreationForm
 
 
 # Create your views here.
@@ -20,6 +21,13 @@ class MangaListView(ListView):
 	model = Manga
 	paginate_by = 10
 
+	def get_queryset(self):
+		if 'favorites-mangas' in self.request.path and self.request.path.find('favorites-mangas') == len(self.request.path)-len('favorites-mangas'):
+			obj_list = Manga.objects.filter(manga_fav__user=self.request.user)
+		else:
+			obj_list = Manga.objects.all()
+		return obj_list
+
 	def get_fav_mangas(self):
 		if self.request.user.is_authenticated:
 			fav_list = Manga_fav.objects.filter(user=self.request.user)
@@ -33,6 +41,10 @@ class MangaListView(ListView):
 		context['fav'] = []
 		for obj in obj_list:
 			context['fav'].append(obj.manga.pk)
+		if 'favorites-mangas' in self.request.path and self.request.path.find('favorites-mangas') == len(self.request.path)-len('favorites-mangas'):
+			context['favorites'] = True
+		else:
+			context['favorites'] = False
 		return context
 
 class VolumeListView(ListView): 
@@ -41,7 +53,11 @@ class VolumeListView(ListView):
 
 	def get_queryset(self):
 		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
-		return Volume.objects.filter(manga=self.manga)
+		if 'favorites-volumes' in self.request.path and self.request.path.find('favorites-volumes') == len(self.request.path)-len('favorites-volumes'):
+			obj_list = Volume.objects.filter(manga=self.manga, volume_fav__user=self.request.user)
+		else:
+			obj_list = Volume.objects.filter(manga=self.manga)
+		return obj_list
 
 	def get_fav_volumes(self):
 		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
@@ -58,6 +74,10 @@ class VolumeListView(ListView):
 		context['fav'] = []
 		for obj in obj_list:
 			context['fav'].append(obj.volume.pk)
+		if 'favorites-volumes' in self.request.path and self.request.path.find('favorites-volumes') == len(self.request.path)-len('favorites-volumes'):
+			context['favorites'] = True
+		else:
+			context['favorites'] = False
 		return context
 
 class ChapterListView(ListView): 
@@ -66,7 +86,11 @@ class ChapterListView(ListView):
 
 	def get_queryset(self):
 		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
-		return Chapter.objects.filter(volume__manga__name=self.manga)
+		if 'favorites-chapters' in self.request.path and self.request.path.find('favorites-chapters') == len(self.request.path)-len('favorites-chapters'):
+			obj_list = Chapter.objects.filter(volume__manga__name=self.manga, chapter_fav__user=self.request.user)
+		else:
+			obj_list = Chapter.objects.filter(volume__manga__name=self.manga)
+		return obj_list
 
 	def get_fav_chapters(self):
 		self.manga = get_object_or_404(Manga, name=self.kwargs["manga_name"])
@@ -96,6 +120,10 @@ class ChapterListView(ListView):
 		context['fav'] = []
 		for obj in obj_list:
 			context['fav'].append(obj.chapter.pk)
+		if 'favorites-chapters' in self.request.path and self.request.path.find('favorites-chapters') == len(self.request.path)-len('favorites-chapters'):
+			context['favorites'] = True
+		else:
+			context['favorites'] = False
 		return context
 
 class VChapterListView(ListView): 
@@ -136,6 +164,32 @@ class VChapterListView(ListView):
 		for obj in obj_list:
 			context['fav'].append(obj.chapter.pk)
 		return context
+
+# Usuario
+
+class UserDetailView(DetailView):
+	model = User
+	template_name = 'mangascripts/user_details.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(UserDetailView, self).get_context_data(**kwargs)
+		context['this_user'] = context['user']
+		context['user'] = self.request.user
+		return context
+
+class UserUpdate(UpdateView):
+	model = User
+	fields = ['first_name','last_name','email']
+	template_name = 'mangascripts/user_form.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(UpdateView, self).get_context_data(**kwargs)
+		context['this_user'] = context['user']
+		context['user'] = self.request.user
+		return context
+
+	def get_success_url(self, **kwargs):
+		return reverse_lazy('user-details', kwargs = {'pk': self.request.user.pk})
 
 # Manga
 
@@ -453,12 +507,15 @@ def vscript(request, manga_name, chapter_n_chap, volume_n_vol):
 	#manga = get_object_or_404(Manga, name=manga_name)
 	#chapter_list = Chapter.objects.filter(volume__manga__name=manga_name, favorite=True).order_by('n_chap')
 	#context = {'manga': manga, 'object_list': chapter_list, 'favorite':True}
-	#return render(request, 'mangascripts/chapter_list.html', context)
+	#return render(request, 'mangascripts/chapter_list.html', context)zz
 
 # Favs
 
-def manga_fav(request, manga_name, manga_pk, page):
-	url = "/mangascripts?page="+str(page)
+def manga_fav(request, manga_name, manga_pk, page, favorites):
+	if favorites == "True":
+		url = "/mangascripts/favorites-mangas?page="+str(page)
+	else:
+		url = "/mangascripts?page="+str(page)
 	m = Manga.objects.get(pk=manga_pk)
 	try:
 		mf = Manga_fav(user=request.user, manga=m)
@@ -467,8 +524,11 @@ def manga_fav(request, manga_name, manga_pk, page):
 		pass
 	return redirect(url)
 
-def manga_unfav(request, manga_name, manga_pk, page):
-	url = "/mangascripts?page="+str(page)
+def manga_unfav(request, manga_name, manga_pk, page, favorites):
+	if favorites == "True":
+		url = "/mangascripts/favorites-mangas?page="+str(page)
+	else:
+		url = "/mangascripts?page="+str(page)
 	m = Manga.objects.get(pk=manga_pk)
 	try:
 		mf = Manga_fav.objects.get(user=request.user, manga=m)
@@ -477,8 +537,11 @@ def manga_unfav(request, manga_name, manga_pk, page):
 		pass
 	return redirect(url)
 
-def volume_fav(request, manga_name, volume_n_vol, volume_pk, page):
-	url = "/mangascripts/"+manga_name+"/volumes?page="+str(page)
+def volume_fav(request, manga_name, volume_n_vol, volume_pk, page, favorites):
+	if favorites == "True":
+		url = "/mangascripts/"+manga_name+"/favorites-volumes?page="+str(page)
+	else:
+		url = "/mangascripts/"+manga_name+"/volumes?page="+str(page)
 	v = Volume.objects.get(pk=volume_pk)
 	try:
 		vf = Volume_fav(user=request.user, volume=v)
@@ -487,8 +550,11 @@ def volume_fav(request, manga_name, volume_n_vol, volume_pk, page):
 		pass
 	return redirect(url)
 
-def volume_unfav(request, manga_name, volume_n_vol, volume_pk, page):
-	url = "/mangascripts/"+manga_name+"/volumes?page="+str(page)
+def volume_unfav(request, manga_name, volume_n_vol, volume_pk, page, favorites):
+	if favorites == "True":
+		url = "/mangascripts/"+manga_name+"/favorites-volumes?page="+str(page)
+	else:
+		url = "/mangascripts/"+manga_name+"/volumes?page="+str(page)
 	v = Volume.objects.get(pk=volume_pk)
 	try:
 		vf = Volume_fav.objects.get(user=request.user, volume=v)
@@ -497,8 +563,11 @@ def volume_unfav(request, manga_name, volume_n_vol, volume_pk, page):
 		pass
 	return redirect(url)
 
-def chapter_fav(request, manga_name, chapter_n_chap, chapter_pk, page):
-	url = "/mangascripts/"+manga_name+"/chapters?page="+str(page)
+def chapter_fav(request, manga_name, chapter_n_chap, chapter_pk, page, favorites):
+	if favorites == "True":
+		url = "/mangascripts/"+manga_name+"/favorites-chapters?page="+str(page)
+	else:
+		url = "/mangascripts/"+manga_name+"/chapters?page="+str(page)
 	c = Chapter.objects.get(pk=chapter_pk)
 	try:
 		cf = Chapter_fav(user=request.user, chapter=c)
@@ -507,8 +576,11 @@ def chapter_fav(request, manga_name, chapter_n_chap, chapter_pk, page):
 		pass
 	return redirect(url)
 
-def chapter_unfav(request, manga_name, chapter_n_chap, chapter_pk, page):
-	url = "/mangascripts/"+manga_name+"/chapters?page="+str(page)
+def chapter_unfav(request, manga_name, chapter_n_chap, chapter_pk, page, favorites):
+	if favorites == "True":
+		url = "/mangascripts/"+manga_name+"/favorites-chapters?page="+str(page)
+	else:
+		url = "/mangascripts/"+manga_name+"/chapters?page="+str(page)
 	c = Chapter.objects.get(pk=chapter_pk)
 	try:
 		cf = Chapter_fav.objects.get(user=request.user, chapter=c)
@@ -670,3 +742,16 @@ def logout_view(request):
 
 def logoutr(request):
 	return render(request, 'mangascripts/logout.html')
+
+def register_redirect(request):
+	return render(request, 'mangascripts/register_ok.html')
+
+def register(request):
+	if request.method == 'POST':
+		form = UserCreationForm(request.POST)
+		if form.is_valid():
+			new_user = form.save()
+			return HttpResponseRedirect("/mangascripts/register_redirect")
+	else:
+		form = UserCreationForm()
+	return render(request, 'mangascripts/register.html', { 'form': form })

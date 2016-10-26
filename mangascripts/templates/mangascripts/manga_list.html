@@ -1,12 +1,18 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-	<h2>Lista de Mangas</h2>
+	<h2>Lista de Mangas{% if favorites %} ( Favoritos ){% endif %}</h2>
 	<body>
 		{% if user.is_authenticated %}
-			<input type="button" value="Nuevo Manga" onclick="location.href='{% url 'manga-new' %}'"><br /><br />
+			<input type="button" value="Nuevo Manga" onclick="location.href='{% url 'manga-new' %}'">
+			{% if favorites %}
+				<input type="button" value="Ver Todos" onclick="location.href='{% url 'manga' %}'">
+			{% else %}
+				<input type="button" value="Ver Favoritos" onclick="location.href='{% url 'favorites-mangas' %}'">
+			{% endif %}
+			<br /><br />
 		{% endif %}
-		{% if object_list or manga_list %}
+		{% if object_list %}
 			<table>
 				<tr>
 					<th width="100%">Manga y Autor</th>
@@ -15,7 +21,7 @@
 					<!-- <th colspan="4">Edición</th> -->
 				</tr>
 				{% for manga in object_list %}
-				<tr>
+				<tr ondblclick="location.href='{% url 'user-details' manga.user.pk %}'" >
 					<td>{{ manga.name }} - {{ manga.author }}</td>
 					<!--<td class="img_cell">
 						<center>
@@ -49,11 +55,11 @@
 						<td class="img_cell">
 							<center>
 								{% if manga.pk in fav %}
-									<a href="{% url 'manga-unfav' manga.name manga.pk page_obj.number %}">
+									<a href="{% url 'manga-unfav' manga.name manga.pk page_obj.number favorites %}">
 										<img src='{% static "mangascripts/images/fav.png" %}' width="24px" alt="Favorito" title="Favorito"/>
 									</a>
 								{% else %}
-									<a href="{% url 'manga-fav' manga.name manga.pk page_obj.number %}">
+									<a href="{% url 'manga-fav' manga.name manga.pk page_obj.number favorites %}">
 										<img src='{% static "mangascripts/images/nfv.png" %}' width="24px" alt="No favorito" title="No favorito"/>
 									</a>
 								{% endif %}
@@ -96,7 +102,7 @@
 				</div>
 			</center>
 		{% else %}
-			<h3>No hay mangas disponibles</h3>
+			<h3>No se encontró ningun manga</h3>
 		{% endif %}
 	</body>
 {% endblock %}

@@ -10,15 +10,15 @@
 		Bienvenido, 
 		{% if user.is_authenticated %}
 			{% if user.first_name and user.last_name %}
-				{{ user.first_name }} {{ user.last_name }}.
+				{{ user.first_name }} {{ user.last_name }}
 			{% else %}
-				{{ user.username }}.
+				{{ user.username }}
 			{% endif %} | 
-			<a class="mylink" href="javascript:void(0)" onclick="alert('No implementado');">Ver Perfil</a>  | 
+			<a class="mylink" href="{% url 'user-details' user.pk %}">Ver perfil</a>  | 
 			<a class="mylink" href="{% url 'logout_view' %}">Cerrar sesión</a> | 
 		{% else %}
-			Usuario Anonimo. | 
-			<a class="mylink" href="javascript:void(0)" onclick="alert('No implementado');">Nuevo Registro</a> | 
+			Usuario Anónimo | 
+			<a class="mylink" href="{% url 'register' %}">Nuevo registro</a> | 
 			<a class="mylink" href="/accounts/login/?next=/">Iniciar sesión</a> | 
 		{% endif %}
 	</div>

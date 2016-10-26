@@ -1,10 +1,15 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-	<h2>Lista de Volúmenes</h2>
+	<h2>Lista de Volúmenes{% if manga %} de {{ manga.name }}{% if favorites %} ( Favoritos ){% endif %}{% endif %}</h2>
 	<body>
 		{% if user.is_authenticated %}
 			<input type="button" value="Nuevo Volumen" onclick="location.href='{% url 'volume-new' manga.name %}'">
+			{% if favorites %}
+				<input type="button" value="Ver Todos" onclick="location.href='{% url 'volume' manga.name %}'">
+			{% else %}
+				<input type="button" value="Ver Favoritos" onclick="location.href='{% url 'favorites-volumes' manga.name %}'">
+			{% endif %}
 		{% endif %}
 		{% if object_list %}
 			<input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
@@ -16,7 +21,7 @@
 					<th width="100px"><center>Capítulos</center></th>
 				</tr>
 				{% for volume in object_list %}
-				<tr>
+				<tr ondblclick="location.href='{% url 'user-details' volume.user.pk %}'" >
 					<td><center>{{ volume.n_vol }}</center></td>
 					<td>{{ volume.title }}</td>
 					<!--<td class="img_cell">
@@ -37,11 +42,11 @@
 						<td class="img_cell">
 							<center>
 								{% if volume.pk in fav %}
-									<a href="{% url 'volume-unfav' manga.name volume.n_vol volume.pk page_obj.number %}">
+									<a href="{% url 'volume-unfav' manga.name volume.n_vol volume.pk page_obj.number favorites %}">
 										<img src='{% static "mangascripts/images/fav.png" %}' width="24px" alt="Favorito" title="Favorito"/>
 									</a>
 								{% else %}
-									<a href="{% url 'volume-fav' manga.name volume.n_vol volume.pk page_obj.number %}">
+									<a href="{% url 'volume-fav' manga.name volume.n_vol volume.pk page_obj.number favorites %}">
 										<img src='{% static "mangascripts/images/nfv.png" %}' width="24px" alt="No favorito" title="No favorito"/>
 									</a>
 								{% endif %}
@@ -84,7 +89,7 @@
 				</div>
 			</center>
 		{% else %}
-			<h3>No hay volúmenes disponibles</h3>
+			<h3>No se encontró ningun volumen</h3>
 		{% endif %}
 		<center><br /><input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'"></center>
 	</body>

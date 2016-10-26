@@ -57,3 +57,31 @@ tr:nth-child(even) {
 .mylink:visited, .mylink:active {
 	color: #0C0;
 }
+
+.profile {
+	width: -moz-fit-content;
+	background-color: #CCC;
+	padding: 10px 20px;
+	margin-left: 10px;
+	border: 5px ridge gray;
+	border-radius: 10px;
+}
+
+.menu {
+	margin-left: 10px;
+}
+
+.error {
+	width: 485px;
+	border: 3px double red;
+	padding-right: 20px;
+	background-color: pink;
+}
+
+.error > ul > li {
+	padding: 5px;
+}
+
+.err-msg {
+	color: #900;
+}

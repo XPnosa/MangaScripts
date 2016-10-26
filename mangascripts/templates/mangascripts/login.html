@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-	<h2>Login</h2>
+	<h2>Iniciar Sesión</h2>
 	{% if form.errors %}
 	<p>Su nombre de usuario y contraseña no coinciden. Por favor, inténtelo de nuevo.</p>
 	{% endif %}
@@ -25,7 +25,7 @@
 	</tr>
 	</table>
 	<br />
-	<input type="submit" value="Login" />
+	<input type="submit" value="Iniciar sesión" />
 	<input type="button" value="Volver" onclick="location.href='javascript:history.back(-1)'">
 	<input type="hidden" name="next" value="{{ next }}" />
 	</form>

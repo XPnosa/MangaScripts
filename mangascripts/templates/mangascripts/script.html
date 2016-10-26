@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-	<h2>Script del capítulo</h2>
+	<h2>Script del capítulo{% if chapter and manga %} {{ chapter.n_chap }} de {{ manga.name }}{% endif %}:</h2>
 	{% if user.is_authenticated and user.pk == chapter.user.pk %}
 		{% if not volume %}
 			<input type="button" value="Editar Capítulo" onclick="location.href='{% url 'chapter-edit' manga.name chapter.n_chap chapter.pk %}'">
@@ -21,25 +21,29 @@
 				<tr>
 					<th width="100%">{{ chapter.title }}</th>
 					<th width="25px">
-					{% if chapter.pk in read %}
-						<a href="{% if not volume %}{% url 'script-unread' manga.name chapter.n_chap chapter.pk %}{% else %}{% url 'vscript-unread' manga.name volume.n_vol chapter.n_chap chapter.pk %}{% endif %}">
-							<img src='{% static "mangascripts/images/O.png" %}' height="20px" width="20px" alt="Leído" title="Leído"/>
-						</a>
+					{% if chapter.translated %}
+						{% if chapter.pk in read %}
+							<a href="{% if chapter.pk not in fav %}{% if not volume %}{% url 'script-unread' manga.name chapter.n_chap chapter.pk %}{% else %}{% url 'vscript-unread' manga.name volume.n_vol chapter.n_chap chapter.pk %}{% endif %}{% else %}javascript:void(0)" onclick="alert('No es posible marcar como no leído un capítulo favorito');{% endif %}">
+								<img src='{% static "mangascripts/images/O.png" %}' height="20px" width="20px" alt="Leído" title="Leído"/>
+							</a>
+						{% else %}
+							<a href="{% if not volume %}{% url 'script-read' manga.name chapter.n_chap chapter.pk %}{% else %}{% url 'vscript-read' manga.name volume.n_vol chapter.n_chap chapter.pk %}{% endif %}">
+								<img src='{% static "mangascripts/images/X.png" %}' height="20px" width="20px" alt="No leído" title="No leído"/>
+							</a>
+						{% endif %}
+						</th>
+						<th width="25px">
+						{% if chapter.pk in fav %}
+							<a href="{% if not volume %}{% url 'script-unfav' manga.name chapter.n_chap chapter.pk %}{% else %}{% url 'vscript-unfav' manga.name volume.n_vol chapter.n_chap chapter.pk %}{% endif %}">
+								<img src='{% static "mangascripts/images/fav.png" %}' height="20px" width="20px" alt="Favorito" title="Favorito"/>
+							</a>
+						{% else %}
+							<a href="{% if chapter.pk in read  %}{% if not volume %}{% url 'script-fav' manga.name chapter.n_chap chapter.pk %}{% else %}{% url 'vscript-fav' manga.name volume.n_vol chapter.n_chap chapter.pk %}{% endif %}{% else %}javascript:void(0)" onclick="alert('No es posible marcar como favorito un capítulo no leído');{% endif %}">
+								<img src='{% static "mangascripts/images/nfv.png" %}' height="20px" width="20px" alt="No favorito" title="No favorito"/>
+							</a>
+						{% endif %}
 					{% else %}
-						<a href="{% if not volume %}{% url 'script-read' manga.name chapter.n_chap chapter.pk %}{% else %}{% url 'vscript-read' manga.name volume.n_vol chapter.n_chap chapter.pk %}{% endif %}">
-							<img src='{% static "mangascripts/images/X.png" %}' height="20px" width="20px" alt="No leído" title="No leído"/>
-						</a>
-					{% endif %}
-					</th>
-					<th width="25px">
-					{% if chapter.pk in fav %}
-						<a href="{% if not volume %}{% url 'script-unfav' manga.name chapter.n_chap chapter.pk %}{% else %}{% url 'vscript-unfav' manga.name volume.n_vol chapter.n_chap chapter.pk %}{% endif %}">
-							<img src='{% static "mangascripts/images/fav.png" %}' height="20px" width="20px" alt="Favorito" title="Favorito"/>
-						</a>
-					{% else %}
-						<a href="{% if not volume %}{% url 'script-fav' manga.name chapter.n_chap chapter.pk %}{% else %}{% url 'vscript-fav' manga.name volume.n_vol chapter.n_chap chapter.pk %}{% endif %}">
-							<img src='{% static "mangascripts/images/nfv.png" %}' height="20px" width="20px" alt="No favorito" title="No favorito"/>
-						</a>
+							<img src='{% static "mangascripts/images/nd.png" %}' width="24px" alt="No disponible" title="No disponible"/>
 					{% endif %}
 					</th>
 				</tr>
