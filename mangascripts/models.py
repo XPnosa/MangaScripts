@@ -7,6 +7,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Create your models here.
 
+# Principales
 
 class Manga(models.Model):
 	name = models.CharField(max_length=100)
@@ -51,3 +52,37 @@ class Chapter(models.Model):
 	class Meta:
 		unique_together = ('volume', 'n_chap')
 		ordering = ["n_chap"]
+
+# Secundarias
+
+class Manga_fav(models.Model):
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	manga = models.ForeignKey(Manga, on_delete=models.CASCADE)
+	def __str__(self):
+		return str(self.user) + " - " + str(self.manga)
+	class Meta:
+		unique_together = ('user', 'manga')
+
+class Volume_fav(models.Model):
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	volume = models.ForeignKey(Volume, on_delete=models.CASCADE)
+	def __str__(self):
+		return str(self.user) + " - " + str(self.volume)
+	class Meta:
+		unique_together = ('user', 'volume')
+
+class Chapter_fav(models.Model):
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
+	def __str__(self):
+		return str(self.user) + " - " + str(self.chapter)
+	class Meta:
+		unique_together = ('user', 'chapter')
+
+class Chapter_read(models.Model):
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
+	def __str__(self):
+		return str(self.user) + " - " + str(self.chapter)
+	class Meta:
+		unique_together = ('user', 'chapter')

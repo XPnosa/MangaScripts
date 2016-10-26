@@ -13,7 +13,7 @@ NOT_AVAILABLE = "No disponible"
 try:
 	SCRAP_USER = User.objects.get(username='scrap')
 except:
-	sc_user = User(username='scrap', password='pasword.'+str(random.randint(1,1000000)))
+	sc_user = User(username='scrap', password='pasword.'+str(random.randint(1000000,9999999)))
 	sc_user.save()
 	SCRAP_USER = sc_user
 

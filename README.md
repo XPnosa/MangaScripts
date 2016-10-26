@@ -14,6 +14,10 @@ scrap &lt;nombre manga&gt;
 
 **Changelog**
 
+- v1.9:
+	- Corregida y repuesta la opción de poder marcar mangas/volúmenes/capítulos como favoritos
+	- Corregida y repuesta la opción de poder marcar un capítulo como leído
+	- Ajustes en el modelo, vistas y plantillas
 - v1.8: 
 	- Correcciones en modelo, vistas, plantillas y en el script de scrap
 - v1.7: 
