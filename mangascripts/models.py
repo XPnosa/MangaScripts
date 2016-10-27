@@ -36,6 +36,7 @@ class Volume(models.Model):
 
 
 class Chapter(models.Model):
+	manga = models.ForeignKey(Manga, on_delete=models.CASCADE)
 	volume = models.ForeignKey(Volume, on_delete=models.CASCADE)
 	n_chap = models.IntegerField(default=0, validators=[MinValueValidator(0)])
 	title = models.CharField(max_length=200)
@@ -49,7 +50,7 @@ class Chapter(models.Model):
 	#def get_absolute_url(self):
 		#return reverse('chapter', kwargs={'manga_name':self.volume.manga.name})
 	class Meta:
-		unique_together = ('volume', 'n_chap')
+		unique_together = ('manga', 'n_chap')
 		ordering = ["n_chap"]
 
 # Secundarias

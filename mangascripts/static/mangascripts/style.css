@@ -71,6 +71,22 @@ tr:nth-child(even) {
 	margin-left: 10px;
 }
 
+.success {
+	width: -moz-fit-content;
+	border: 3px double green;
+	padding-right: 20px;
+	background-color: lawngreen;
+}
+
+
+.success > ul > li {
+	padding: 5px;
+}
+
+.success-msg {
+	color: #090;
+}
+
 .error {
 	width: -moz-fit-content;
 	border: 3px double red;
@@ -84,4 +100,20 @@ tr:nth-child(even) {
 
 .err-msg {
 	color: #900;
+}
+
+.info {
+	width: -moz-fit-content;
+	border: 3px double blue;
+	padding-right: 20px;
+	background-color: skyblue;
+}
+
+
+.info > ul > li {
+	padding: 5px;
+}
+
+.info-msg {
+	color: #009;
 }

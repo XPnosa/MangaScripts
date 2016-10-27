@@ -120,24 +120,25 @@ class ScrapOP:
 					print "\033[1m\033[31mVolume → ("+self.__manga+", "+str(vol['n_vol'])+", "+vol['title']+")\033[0m"
 					if debug:
 						raise
+			m = Manga.objects.get(name=self.__manga)
 			for chap in self.__chapters:
 				try:
 					v = Volume.objects.get(manga__name=self.__manga, n_vol=chap["volume"])
 					try:
 						if chap["script"] == NOT_AVAILABLE:
-							v.chapter_set.create(n_chap=chap["n_chp"], title=chap["title"], script=chap["script"], translated=False, user=SCRAP_USER)
+							v.chapter_set.create(manga=m, n_chap=chap["n_chp"], title=chap["title"], script=chap["script"], translated=False, user=SCRAP_USER)
 						else:
-							v.chapter_set.create(n_chap=chap["n_chp"], title=chap["title"], script=chap["script"], translated=True, user=SCRAP_USER)
+							v.chapter_set.create(manga=m, n_chap=chap["n_chp"], title=chap["title"], script=chap["script"], translated=True, user=SCRAP_USER)
 					except:
 						c = Chapter.objects.get(volume__manga__name=self.__manga, n_chap=chap["n_chp"])
 						if not c.protected and c.script == NOT_AVAILABLE and chap["script"] != NOT_AVAILABLE:
 							c.delete()
-							v.chapter_set.create(n_chap=chap["n_chp"], title=chap["title"], script=chap["script"], translated=True, user=SCRAP_USER)
+							v.chapter_set.create(manga=m, n_chap=chap["n_chp"], title=chap["title"], script=chap["script"], translated=True, user=SCRAP_USER)
 						else:
 							raise
-					print "\033[1m\033[32mChapter → ("+str(chap["volume"])+", "+str(chap['n_chp'])+", "+chap['title']+", "+str(len(chap["script"]))+" characters)\033[0m"
+					print "\033[1m\033[32mChapter → ("+str(m)+", "+str(chap["volume"])+", "+str(chap['n_chp'])+", "+chap['title']+", "+str(len(chap["script"]))+" characters)\033[0m"
 				except:
-					print "\033[1m\033[31mChapter → ("+str(chap["volume"])+", "+str(chap['n_chp'])+", "+chap['title']+", 0 characters)\033[0m"
+					print "\033[1m\033[31mChapter → ("+str(m)+", "+str(chap["volume"])+", "+str(chap['n_chp'])+", "+chap['title']+", 0 characters)\033[0m"
 					if debug:
 						raise
 		except:

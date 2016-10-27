@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-	<h2>Cerrar Sesión</h2>
-	<p>La sesión se ha cerrado correctamente</p>
-	<input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
+	<h2>Sesión Cerrada</h2>
+	<h4 class="success-msg">¡Hasta otra!</h4>
+	<div class="success"><ul><li>La sesión se ha cerrado correctamente</li></ul></div>
+	<br /><input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
 {% endblock %}

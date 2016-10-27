@@ -24,6 +24,7 @@
 			<br /><br />
 			<table>
 				<tr>
+					{% if user.is_authenticated %}<th width="20px"><img title="Propietario" height="18px" src="{% static 'images/lock.png' %}"/></th>{% endif %}
 					<th width="100px">Capítulo</th>
 					<th width="100%">Título</th>
 					<th width="100px"><center>Script</center></th>
@@ -31,7 +32,18 @@
 					{% if user.is_authenticated and not favorites %}<th width="50px"><center>Leído</center></th>{% endif %}
 				</tr>
 				{% for chapter in object_list %}
-				<tr ondblclick="location.href='{% url 'user-details' chapter.user.pk %}'" >
+				<tr>
+					{% if user.is_authenticated %}
+					<td>
+						<a href="{% url 'user-details' chapter.user.pk %}">
+							{% if user.pk == chapter.user.pk %}
+								<img title="Ver tu perfil" height="16px" src="{% static 'images/my.png' %}"/>
+							{% else %}
+								<img title="Ver perfil de {{manga.user}}" height="16px" src="{% static 'images/up.png' %}"/>
+							{% endif %}
+						</a>
+					</td>
+					{% endif %}
 					<td><center>{{ chapter.n_chap }}</center></td>
 					<td>{{ chapter.title }}</td>
 					{% if not volume %}
@@ -39,7 +51,7 @@
 							<center>
 								{% if chapter.translated %}
 								<a href="{% url 'script' manga.name chapter.n_chap %}">
-									<img src='{% static "mangascripts/images/go.png" %}' width="24px" alt="Ver script" title="Ver script"/>
+									<img src='{% static "mangascripts/images/go.png" %}' width="24px" alt="Ver script de traducción" title="Ver script de traducción"/>
 								</a>
 								{% else %}
 									<img src='{% static "mangascripts/images/nd.png" %}' width="24px" alt="No disponible" title="No disponible"/>

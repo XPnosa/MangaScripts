@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+	<h2>Cambio de Contraseña</h2>
+	<body>
+		{% load replace %}
+		{% if user.is_authenticated %}
+			{% if form.errors %}
+				<h4 class="err-msg">Se han producido los siguientes errores:</h4>
+				<div class="error">
+					{% replace search="old_password" replacement="Contraseña Antigua:" %}
+						{% replace search="new_password2" replacement="Nueva Contraseña:" %}
+							{{ form.errors }}
+						{% endreplace %}
+					{% endreplace %}
+				</div>
+			{% else %}
+				<h4 class="info-msg">Su nueva contraseña debe cumplir con las siguientes restricciones:</h4>
+				<div class="info">
+					<ul>
+						<li>Su contraseña no puede asemejarse a su otra información personal.</li>
+						<li>Su contraseña debe contener al menos 8 caracteres.</li>
+						<li>Su contraseña no puede ser una clave utilizada comunmente.</li>
+						<li>Su contraseña no puede ser completamente numérica.</li>
+					</ul>
+				</div>
+			{% endif %}
+			<br />
+			<form method="post">
+				{% csrf_token %}
+				<table>
+				<tr>
+					<td>{{ form.old_password.label_tag }}</td>
+					<td>{{ form.old_password }}</td>
+				</tr>
+				<tr>
+					<td>{{ form.new_password1.label_tag }}</td>
+					<td>{{ form.new_password1 }}</td>
+				</tr>
+				<tr>
+					<td>{{ form.new_password2.label_tag }}</td>
+					<td>{{ form.new_password2 }}</td>
+				</tr>
+				</table>
+				<br />
+				<input type="submit" value="Cambiar" />
+				<input type="button" value="Volver" onclick="location.href='{% url 'user-details' user.pk %}'">
+			</form>
+		{% else %}
+			<h3>No esta autorizado para ver esta página</h3>
+			<input type="button" value="Volver" onclick="location.href='{% url 'user-details' user.pk %}'">
+		{% endif %}
+	</body>
+{% endblock %}

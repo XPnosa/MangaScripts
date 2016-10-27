@@ -5,7 +5,9 @@
 	{% if user.is_authenticated %}
 		<div class="menu">
 			{% if user == this_user %}
-				<input type="button" value="Editar Perfil" onclick="location.href='{% url 'user-edit' user.pk %}'"><br /><br />
+				<input type="button" value="Editar Perfil" onclick="location.href='{% url 'user-edit' user.pk %}'">
+				<input type="button" value="Cambiar Contraseña" onclick="location.href='{% url 'change_password' %}'">
+				<br /><br />
 			{% endif %}
 		</div>
 		<div class="profile">
@@ -14,10 +16,15 @@
 			<p><strong>Correo</strong>: {% if this_user.email %}{{ this_user.email }}{% else %}?{% endif %}</p>
 		</div>
 		<div class="menu">
-			<br /><input type="button" value="Inicio" onclick="location.href='{% url 'manga' %}'">
+			<br />
+			{% if user == this_user %}
+				<input type="button" value="Inicio" onclick="location.href='{% url 'manga' %}'">
+			{% else %}
+				<input type="button" value="Volver" onclick="history.back()">
+			{% endif %}
 		</div>
 	{% else %}
-	<h3>No esta autorizado para ver esta página</h3>
-	<input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
+		<h3>No esta autorizado para ver esta página</h3>
+		<input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
 	{% endif %}
 {% endblock %}

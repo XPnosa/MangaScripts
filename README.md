@@ -14,6 +14,10 @@ scrap &lt;nombre manga&gt;
 
 **Changelog**
 
+- v2.2:
+	- Añadida la opción de cambiar la contraseña de tu usuario
+	- Añadida la opción de ver los perfiles de usuarios contribuidores
+	- Correcciones y ajustes en el modelo, plantillas y en el script de scrap
 - v2.1:
 	- Correcciones menores en modelo y plantillas
 - v2.0:

@@ -1,12 +1,12 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect, render_to_response 
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 
 
 # Create your views here.
@@ -277,7 +277,7 @@ class VolumeDelete(DeleteView):
 
 class ChapterAdd(CreateView):
 	model = Chapter
-	fields = ['volume','n_chap','title','script','translated','user']
+	fields = ['manga','volume','n_chap','title','script','translated','user']
 
 	def get_success_url(self, **kwargs):
 		return reverse_lazy('chapter', kwargs = {'manga_name': self.get_manga().name})
@@ -301,7 +301,7 @@ class ChapterAdd(CreateView):
 
 class VChapterAdd(CreateView):
 	model = Chapter
-	fields = ['volume','n_chap','title', 'script', 'translated','user']
+	fields = ['manga','volume','n_chap','title', 'script', 'translated','user']
 
 	def get_success_url(self, **kwargs):
 		return reverse_lazy('vchapter', kwargs = {'manga_name': self.get_manga().name, 'volume_n_vol':self.get_volume().n_vol})
@@ -746,6 +746,9 @@ def logoutr(request):
 def register_redirect(request):
 	return render(request, 'mangascripts/register_ok.html')
 
+def password_redirect(request):
+	return render(request, 'mangascripts/password_ok.html')
+
 def register(request):
 	if request.method == 'POST':
 		form = UserCreationForm(request.POST)
@@ -755,3 +758,15 @@ def register(request):
 	else:
 		form = UserCreationForm()
 	return render(request, 'mangascripts/register.html', { 'form': form })
+
+def change_password(request):
+	if request.method == 'POST':
+		form = PasswordChangeForm(request.user, request.POST)
+		if form.is_valid():
+			user = form.save()
+			#update_session_auth_hash(request, user)  # Important!
+			logout(request)
+			return HttpResponseRedirect("/mangascripts/password_redirect")
+	else:
+		form = PasswordChangeForm(request.user)
+	return render(request, 'mangascripts/pw_change.html', { 'form': form })

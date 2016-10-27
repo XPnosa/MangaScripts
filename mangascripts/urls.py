@@ -38,6 +38,7 @@ urlpatterns = [
 	# User
 	url(r'^user-details/user=(?P<pk>[0-9]+)$', UserDetailView.as_view(), name='user-details'),
 	url(r'^user-edit/user=(?P<pk>[0-9]+)$', UserUpdate.as_view(), name='user-edit'),
+	url(r'^password/$', views.change_password, name='change_password'),
 
 	# No genericas
 	# url(r'^$', views.index, name='index'),
@@ -75,4 +76,5 @@ urlpatterns = [
 	url(r'^logout_redirect$', views.logoutr, name='logoutr'),
 	url(r'^register$', views.register, name='register'),
 	url(r'^register_redirect$', views.register_redirect, name='register_redirect'),
+	url(r'^password_redirect$', views.password_redirect, name='password_redirect'),
 ]

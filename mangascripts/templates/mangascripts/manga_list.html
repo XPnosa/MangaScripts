@@ -15,14 +15,28 @@
 		{% if object_list %}
 			<table>
 				<tr>
+					{% if user.is_authenticated %}<th width="20px"><img title="Propietario" height="18px" src="{% static 'images/lock.png' %}"/></th>{% endif %}
 					<th width="100%">Manga y Autor</th>
 					<th width="100px"><center>Volúmenes</center></th>
 					<th width="100px"><center>Capítulos</center></th>
 					<!-- <th colspan="4">Edición</th> -->
 				</tr>
 				{% for manga in object_list %}
-				<tr ondblclick="location.href='{% url 'user-details' manga.user.pk %}'" >
-					<td>{{ manga.name }} - {{ manga.author }}</td>
+				<tr>
+					{% if user.is_authenticated %}
+					<td>
+						<a href="{% url 'user-details' manga.user.pk %}">
+							{% if user.pk == manga.user.pk %}
+								<img title="Ver tu perfil" height="16px" src="{% static 'images/my.png' %}"/>
+							{% else %}
+								<img title="Ver perfil de {{manga.user}}" height="16px" src="{% static 'images/up.png' %}"/>
+							{% endif %}
+						</a>
+					</td>
+					{% endif %}
+					<td>
+						{{ manga.name }} - {{ manga.author }}
+					</td>
 					<!--<td class="img_cell">
 						<center>
 							<a href="{% url 'volume-new' manga.name %}">

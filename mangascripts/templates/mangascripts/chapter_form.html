@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-	<h2>Edición de Capítulos</h2>
+	<h2>Edición de Capítulos de {{ manga.name }}</h2>
 	<body>
 		{% if user.is_authenticated %}
 			{% load replace %}
@@ -9,8 +9,8 @@
 				<h4 class="err-msg">Se han producido los siguientes errores:</h4>
 				<div class="error">
 					{% replace search="n_chap" replacement="Capítulo:" %}
-						{% replace search="__all__" replacement="Varios:" %}
-							{% replace search="Chapter con este Volume y N chap ya existe." replacement="Ya existe el Capítulo para este Manga" %}
+						{% replace search="__all__" replacement="Restricción:" %}
+							{% replace search="Chapter con este Manga y N chap ya existe." replacement="Ya existe el Capítulo introducido para este Manga" %}
 								{{ form.errors }}
 							{% endreplace %}
 						{% endreplace %}
@@ -23,12 +23,14 @@
 					{% csrf_token %}
 					<table>
 						<tr>
+							<th>Volumen</th>
 							<th>Capítulo</th>
 							<th>Título</th>
 							<th>Script</th>
 							<th>Traducido</th>
 						</tr>
 						<tr>
+							<td>{{ volume.title }}</td>
 							<td><center>{{ object.n_chap }}</center></td>
 							{% if user.pk == object.user.pk %}
 								<td>{{ form.title }}</td>
@@ -56,6 +58,7 @@
 			<form enctype="multipart/form-data" method="post">
 				{% csrf_token %}
 				<input id="user" type="hidden" name="user" value="{{ user.pk }}">
+				<input id="manga" type="hidden" name="manga" value="{{ manga.pk }}">
 				{% if not volumeless %}
 					<input id="volume" type="hidden" name="volume" value="{{ volume.pk }}">
 				{% endif %}

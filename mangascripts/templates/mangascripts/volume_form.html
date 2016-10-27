@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-	<h2>Edición de Volúmenes</h2>
+	<h2>Edición de Volúmenes de {{ manga.name }}</h2>
 	<body>
 		{% if user.is_authenticated %}
 			{% load replace %}
@@ -9,8 +9,8 @@
 				<h4 class="err-msg">Se han producido los siguientes errores:</h4>
 				<div class="error">
 					{% replace search="n_vol" replacement="Volumen:" %}
-						{% replace search="__all__" replacement="Varios:" %}
-							{% replace search="Volume con este Manga y N vol ya existe." replacement="Ya existe el Volumen para este Manga" %}
+						{% replace search="__all__" replacement="Restricción:" %}
+							{% replace search="Volume con este Manga y N vol ya existe." replacement="Ya existe el Volumen introducido para este Manga" %}
 								{{ form.errors }}
 							{% endreplace %}
 						{% endreplace %}

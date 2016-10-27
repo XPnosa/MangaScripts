@@ -16,12 +16,24 @@
 			<br /><br />
 			<table>
 				<tr>
+					{% if user.is_authenticated %}<th width="20px"><img title="Propietario" height="18px" src="{% static 'images/lock.png' %}"/></th>{% endif %}
 					<th width="100px">Volumen</th>
 					<th width="100%">Título</th>
 					<th width="100px"><center>Capítulos</center></th>
 				</tr>
 				{% for volume in object_list %}
-				<tr ondblclick="location.href='{% url 'user-details' volume.user.pk %}'" >
+				<tr>
+					{% if user.is_authenticated %}
+					<td>
+						<a href="{% url 'user-details' volume.user.pk %}">
+							{% if user.pk == volume.user.pk %}
+								<img title="Ver tu perfil" height="16px" src="{% static 'images/my.png' %}"/>
+							{% else %}
+								<img title="Ver perfil de {{manga.user}}" height="16px" src="{% static 'images/up.png' %}"/>
+							{% endif %}
+						</a>
+					</td>
+					{% endif %}
 					<td><center>{{ volume.n_vol }}</center></td>
 					<td>{{ volume.title }}</td>
 					<!--<td class="img_cell">
