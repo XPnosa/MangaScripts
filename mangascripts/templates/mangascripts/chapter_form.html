@@ -4,6 +4,20 @@
 	<h2>Edición de Capítulos</h2>
 	<body>
 		{% if user.is_authenticated %}
+			{% load replace %}
+			{% if form.errors %}
+				<h4 class="err-msg">Se han producido los siguientes errores:</h4>
+				<div class="error">
+					{% replace search="n_chap" replacement="Capítulo:" %}
+						{% replace search="__all__" replacement="Varios:" %}
+							{% replace search="Chapter con este Volume y N chap ya existe." replacement="Ya existe el Capítulo para este Manga" %}
+								{{ form.errors }}
+							{% endreplace %}
+						{% endreplace %}
+					{% endreplace %}
+				</div>
+				<br />
+			{% endif %}
 			{% if object %}
 				<form enctype="multipart/form-data" method="post">
 					{% csrf_token %}

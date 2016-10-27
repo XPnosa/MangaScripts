@@ -72,7 +72,7 @@ tr:nth-child(even) {
 }
 
 .error {
-	width: 485px;
+	width: -moz-fit-content;
 	border: 3px double red;
 	padding-right: 20px;
 	background-color: pink;

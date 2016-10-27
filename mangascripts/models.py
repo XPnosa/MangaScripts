@@ -10,7 +10,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 # Principales
 
 class Manga(models.Model):
-	name = models.CharField(max_length=100)
+	name = models.CharField(max_length=100, unique=True)
 	author = models.CharField(max_length=100)
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	def __str__(self):
@@ -18,7 +18,6 @@ class Manga(models.Model):
 	def get_absolute_url(self):
 		return reverse('manga')
 	class Meta:
-		unique_together = ('name', 'author')
 		ordering = ["name"]
 
 

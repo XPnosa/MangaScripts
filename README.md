@@ -14,6 +14,8 @@ scrap &lt;nombre manga&gt;
 
 **Changelog**
 
+- v2.1:
+	- Correcciones menores en modelo y plantillas
 - v2.0:
 	- Añadidas páginas de registro y perfil
 	- Corregida y repuesta la opción de poder filtrar mangas/volúmenes/capítulos por favoritos

@@ -8,7 +8,6 @@
 		{% if form.errors %}
 			<h4 class="err-msg">Se han producido los siguientes errores:</h4>
 			<div class="error">
-				
 				{% replace search="username" replacement="Nombre de usuario:" %}
 					{% replace search="password2" replacement="Contraseña:" %}
 						{{ form.errors }}

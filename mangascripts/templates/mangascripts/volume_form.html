@@ -4,6 +4,20 @@
 	<h2>Edición de Volúmenes</h2>
 	<body>
 		{% if user.is_authenticated %}
+			{% load replace %}
+			{% if form.errors %}
+				<h4 class="err-msg">Se han producido los siguientes errores:</h4>
+				<div class="error">
+					{% replace search="n_vol" replacement="Volumen:" %}
+						{% replace search="__all__" replacement="Varios:" %}
+							{% replace search="Volume con este Manga y N vol ya existe." replacement="Ya existe el Volumen para este Manga" %}
+								{{ form.errors }}
+							{% endreplace %}
+						{% endreplace %}
+					{% endreplace %}
+				</div>
+				<br />
+			{% endif %}
 			{% if object %}
 				<form enctype="multipart/form-data" method="post">
 					{% csrf_token %}
