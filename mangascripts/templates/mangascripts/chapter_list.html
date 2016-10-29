@@ -3,6 +3,7 @@
 {% block content %}
 	<h2>Lista de Capítulos{% if manga %} de {{ manga.name }}{% if volume %} ( Volumen {{volume.n_vol}} ){% endif %}{% if favorites %} ( Favoritos ){% endif %}{% endif %}</h2>
 	<body>
+		<div class="buttons">
 		{% if user.is_authenticated %}
 			{% if not volumeless %}
 				<input type="button" value="Nuevo Capítulo" onclick="location.href='{% url 'vchapter-new' manga.name volume.n_vol %}'">
@@ -21,7 +22,7 @@
 			{% else %}
 				<input type="button" value="Volver" onclick="location.href='{% url 'volume' manga.name %}'">
 			{% endif %}
-			<br /><br />
+			</div><br />
 			<table>
 				<tr>
 					{% if user.is_authenticated %}<th width="20px"><img title="Propietario" height="18px" src="{% static 'images/lock.png' %}"/></th>{% endif %}
@@ -110,7 +111,7 @@
 								{% endif %}
 							</center>
 						</td>
-						{% if user.pk == chapter.user.pk %}
+						{% if user.pk == chapter.user.pk or user.is_staff %}
 							{% if not volume %}
 								<td class="img_cell">
 									<center>
@@ -164,7 +165,7 @@
 				</div>
 			</center>
 		{% else %}
-			<h3>No se encontró ningun capítulo</h3>
+			<center><h3 class="err-msg">No se encontró ningun capítulo</h3></center>
 		{% endif %}
 		<center>
 		<br />

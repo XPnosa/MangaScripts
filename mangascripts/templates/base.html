@@ -4,9 +4,14 @@
 	<title>{% block title %}{% endblock %}</title>
 	<link rel="icon" type="image/png" href="{% static 'images/sitelogo.png' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'mangascripts/style.css' %}" />
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 </head>
 	{% if request.path != "/accounts/login/" and request.path != "/login/" %}
 	<div class="login">
+		{% if user.is_staff %}
+			<img class="staff" width="15px" src="{% static 'images/staff.png' %}" alt="staff" title="Staff" />
+		{% endif %}
 		Bienvenido, 
 		{% if user.is_authenticated %}
 			{% if user.first_name and user.last_name %}

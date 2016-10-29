@@ -13,7 +13,8 @@ scrap &lt;nombre manga&gt;
 - One Piece
 
 **Changelog**
-
+- v2.3:
+	- Añadido Bootstrap al sistema de plantillas
 - v2.2:
 	- Añadida la opción de cambiar la contraseña de tu usuario
 	- Añadida la opción de ver los perfiles de usuarios contribuidores

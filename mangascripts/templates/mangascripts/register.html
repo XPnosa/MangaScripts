@@ -4,7 +4,7 @@
 	<h2>Nuevo Registro</h2>
 	<body>
 		{% load replace %}
-		<p>Cumplimente el siguiente formulario para darse de alta:</p>
+		<p class="info-msg">Cumplimente el siguiente formulario para darse de alta:</p>
 		{% if form.errors %}
 			<h4 class="err-msg">Se han producido los siguientes errores:</h4>
 			<div class="error">
@@ -19,22 +19,24 @@
 		<form method="post">
 		{% csrf_token %}
 		<table>
-		<tr>
-			<td>{{ form.username.label_tag }}</td>
-			<td>{{ form.username }}</td>
-		</tr>
-		<tr>
-			<td>{{ form.password1.label_tag }}</td>
-			<td>{{ form.password1 }}</td>
-		</tr>
-		<tr>
-			<td>{{ form.password2.label_tag }}</td>
-			<td>{{ form.password2 }}</td>
-		</tr>
-		</table>
-		<br />
-		<input type="submit" value="Registrar" />
-		<input type="button" value="Volver" onclick="{% url 'manga' %}">
+			<tr>
+				<td>{{ form.username.label_tag }}</td>
+				<td>{{ form.username }}</td>
+			</tr>
+			<tr>
+				<td>{{ form.password1.label_tag }}</td>
+				<td>{{ form.password1 }}</td>
+			</tr>
+			<tr>
+				<td>{{ form.password2.label_tag }}</td>
+				<td>{{ form.password2 }}</td>
+			</tr>
+			</table>
+			<br />
+			<div class="buttons">
+				<input type="submit" value="Registrar" />
+				<input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
+			</div>
 		</form>
 	</body>
 {% endblock %}

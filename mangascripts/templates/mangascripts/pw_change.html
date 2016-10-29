@@ -43,12 +43,14 @@
 				</tr>
 				</table>
 				<br />
-				<input type="submit" value="Cambiar" />
-				<input type="button" value="Volver" onclick="location.href='{% url 'user-details' user.pk %}'">
+				<div class="buttons">
+					<input type="submit" value="Cambiar" />
+					<input type="button" value="Volver" onclick="location.href='{% url 'user-details' user.pk %}'">
+				</div>
 			</form>
 		{% else %}
-			<h3>No esta autorizado para ver esta página</h3>
-			<input type="button" value="Volver" onclick="location.href='{% url 'user-details' user.pk %}'">
+			<h3 class="err-msg">No esta autorizado para ver esta página</h3>
+			<div class="buttons"><input type="button" value="Volver" onclick="location.href='{% url 'user-details' user.pk %}'"></div>
 		{% endif %}
 	</body>
 {% endblock %}

@@ -4,13 +4,15 @@
 	<h2>Lista de Mangas{% if favorites %} ( Favoritos ){% endif %}</h2>
 	<body>
 		{% if user.is_authenticated %}
+		<div class="buttons">
 			<input type="button" value="Nuevo Manga" onclick="location.href='{% url 'manga-new' %}'">
 			{% if favorites %}
 				<input type="button" value="Ver Todos" onclick="location.href='{% url 'manga' %}'">
 			{% else %}
 				<input type="button" value="Ver Favoritos" onclick="location.href='{% url 'favorites-mangas' %}'">
 			{% endif %}
-			<br /><br />
+		</div>
+		<br />
 		{% endif %}
 		{% if object_list %}
 			<table>
@@ -79,7 +81,7 @@
 								{% endif %}
 							</center>
 						</td>
-						{% if user.pk == manga.user.pk %}
+						{% if user.pk == manga.user.pk or user.is_staff %}
 							<td class="img_cell">
 								<center>
 									<a href="{% url 'manga-edit' manga.name manga.pk %}">
@@ -116,7 +118,7 @@
 				</div>
 			</center>
 		{% else %}
-			<h3>No se encontró ningun manga</h3>
+			<center><h3 class="err-msg">No se encontró ningun manga</h3></center>
 		{% endif %}
 	</body>
 {% endblock %}

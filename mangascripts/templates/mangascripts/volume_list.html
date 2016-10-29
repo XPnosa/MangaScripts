@@ -3,6 +3,7 @@
 {% block content %}
 	<h2>Lista de Volúmenes{% if manga %} de {{ manga.name }}{% if favorites %} ( Favoritos ){% endif %}{% endif %}</h2>
 	<body>
+		<div class="buttons">
 		{% if user.is_authenticated %}
 			<input type="button" value="Nuevo Volumen" onclick="location.href='{% url 'volume-new' manga.name %}'">
 			{% if favorites %}
@@ -13,7 +14,8 @@
 		{% endif %}
 		{% if object_list %}
 			<input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
-			<br /><br />
+			</div>
+			<br />
 			<table>
 				<tr>
 					{% if user.is_authenticated %}<th width="20px"><img title="Propietario" height="18px" src="{% static 'images/lock.png' %}"/></th>{% endif %}
@@ -64,7 +66,7 @@
 								{% endif %}
 							</center>
 						</td>
-						{% if user.pk == volume.user.pk %}
+						{% if user.pk == volume.user.pk or user.is_staff %}
 							<td class="img_cell">
 								<center>
 									<a href="{% url 'volume-edit' manga.name volume.n_vol volume.pk %}">
@@ -101,7 +103,7 @@
 				</div>
 			</center>
 		{% else %}
-			<h3>No se encontró ningun volumen</h3>
+			<center><h3 class="err-msg">No se encontró ningun volumen</h3></center>
 		{% endif %}
 		<center><br /><input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'"></center>
 	</body>

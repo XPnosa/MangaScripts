@@ -3,6 +3,7 @@
 {% block content %}
 	<h2>Edición de Perfil</h2>
 	<body>
+		<br />
 		{% if user.is_authenticated and this_user == user %}
 			{% if this_user %}
 				<form enctype="multipart/form-data" method="post">
@@ -23,13 +24,15 @@
 						</tr>
 					</table>
 					<br />
-					<button type="submit">Guardar</button>
-					<input type="button" value="Volver" onclick="location.href='{% url 'user-details' user.pk %}'">
+					<div class="buttons">
+						<button type="submit">Guardar</button>
+						<input type="button" value="Volver" onclick="location.href='{% url 'user-details' user.pk %}'">
+					</div>
 				</form>
 			{% endif %}
 		{% else %}
-			<h3>No esta autorizado para ver esta página</h3>
-			<input type="button" value="Volver" onclick="location.href='{% url 'user-details' user.pk %}'">
+			<h3 class="err-msg">No esta autorizado para ver esta página</h3>
+			<div class="buttons"><input type="button" value="Volver" onclick="location.href='{% url 'user-details' user.pk %}'"></div>
 		{% endif %}
 	</body>
 {% endblock %}

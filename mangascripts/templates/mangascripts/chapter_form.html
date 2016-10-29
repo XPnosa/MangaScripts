@@ -3,6 +3,7 @@
 {% block content %}
 	<h2>Edición de Capítulos de {{ manga.name }}</h2>
 	<body>
+		<br />
 		{% if user.is_authenticated %}
 			{% load replace %}
 			{% if form.errors %}
@@ -23,16 +24,16 @@
 					{% csrf_token %}
 					<table>
 						<tr>
-							<th>Volumen</th>
+							{% if not volumeless %}<th>Volumen</th>{% endif %}
 							<th>Capítulo</th>
 							<th>Título</th>
 							<th>Script</th>
 							<th>Traducido</th>
 						</tr>
 						<tr>
-							<td>{{ volume.title }}</td>
+							{% if not volumeless %}<td>{{ volume.title }}</td>{% endif %}
 							<td><center>{{ object.n_chap }}</center></td>
-							{% if user.pk == object.user.pk %}
+							{% if user.pk == object.user.pk or user.is_staff %}
 								<td>{{ form.title }}</td>
 								<td>{{ form.script }}</td>
 								<td><center>{{ form.translated }}</center></td>
@@ -47,12 +48,14 @@
 						</tr>
 					</table>
 					<br />
-					<button type="submit">Guardar</button>
-					{% if volumeless %}
-						<input type="button" value="Volver" onclick="location.href='{% url 'chapter' manga.name %}'">
-					{% else %}
-						<input type="button" value="Volver" onclick="location.href='{% url 'vchapter' manga.name volume.n_vol %}'">
-					{% endif %}
+					<div class="buttons">
+						<button type="submit">Guardar</button>
+						{% if volumeless %}
+							<input type="button" value="Volver" onclick="location.href='{% url 'chapter' manga.name %}'">
+						{% else %}
+							<input type="button" value="Volver" onclick="location.href='{% url 'vchapter' manga.name volume.n_vol %}'">
+						{% endif %}
+					</div>
 				</form>
 			{% else %}
 			<form enctype="multipart/form-data" method="post">
@@ -89,21 +92,25 @@
 					</tr>
 				</table>
 				<br />
-				<button type="submit">Guardar</button>
+				<div class="buttons">
+					<button type="submit">Guardar</button>
+					{% if volumeless %}
+						<input type="button" value="Volver" onclick="location.href='{% url 'chapter' manga.name %}'">
+					{% else %}
+						<input type="button" value="Volver" onclick="location.href='{% url 'vchapter' manga.name volume.n_vol %}'">
+					{% endif %}
+				</div>
+			</form>
+			{% endif %}
+		{% else %}
+			<h3>No esta autorizado para ver esta página</h3>
+			<div class="buttons">
 				{% if volumeless %}
 					<input type="button" value="Volver" onclick="location.href='{% url 'chapter' manga.name %}'">
 				{% else %}
 					<input type="button" value="Volver" onclick="location.href='{% url 'vchapter' manga.name volume.n_vol %}'">
 				{% endif %}
-			</form>
-			{% endif %}
-		{% else %}
-			<h3>No esta autorizado para ver esta página</h3>
-			{% if volumeless %}
-				<input type="button" value="Volver" onclick="location.href='{% url 'chapter' manga.name %}'">
-			{% else %}
-				<input type="button" value="Volver" onclick="location.href='{% url 'vchapter' manga.name volume.n_vol %}'">
-			{% endif %}
+			</div>
 		{% endif %}
 	</body>
 {% endblock %}

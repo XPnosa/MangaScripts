@@ -2,6 +2,7 @@
 {% load static %}
 {% block content %}
 	<h2>Traducción del capítulo{% if chapter and manga %} {{ chapter.n_chap }} de {{ manga.name }}{% endif %}</h2>
+	<div class="buttons">
 	{% if user.is_authenticated and user.pk == chapter.user.pk %}
 		{% if not volume %}
 			<input type="button" value="Editar Capítulo" onclick="location.href='{% url 'chapter-edit' manga.name chapter.n_chap chapter.pk %}'">
@@ -14,7 +15,7 @@
 	{% else %}
 		<input type="button" value="Volver" onclick="location.href='{% url 'vchapter' manga.name volume.n_vol %}'">
 	{% endif %}
-	<br /><br />
+	</div><br />
 	<body>
 		{% if chapter %}
 			<table>
@@ -52,13 +53,15 @@
 				</tr>
 			</table>
 			<br />
+			<div class="buttons">
 			{% if not volume %}
 				<input type="button" value="Volver" onclick="location.href='{% url 'chapter' manga.name %}'">
 			{% else %}
 				<input type="button" value="Volver" onclick="location.href='{% url 'vchapter' manga.name volume.n_vol %}'">
 			{% endif %}
+			</div>
 		{% else %}
-			<h3>No hay script disponible</h3>
+			<h3 class="err-msg">No hay script disponible</h3>
 		{% endif %}
 	</body>
 {% endblock %}

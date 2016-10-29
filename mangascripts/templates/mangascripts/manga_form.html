@@ -3,6 +3,7 @@
 {% block content %}
 	<h2>Edición de Mangas</h2>
 	<body>
+		<br />
 		{% if user.is_authenticated %}
 			{% load replace %}
 			{% if form.errors %}
@@ -26,7 +27,7 @@
 						</tr>
 						<tr>
 							<td>{{ object.name }}</td>
-								{% if user.pk == object.user.pk %}
+								{% if user.pk == object.user.pk or user.is_staff %}
 									<td>{{ form.author }}</td>
 								{% else %}
 									<td>{{ object.author }}</td>
@@ -36,8 +37,10 @@
 						</tr>
 					</table>
 					<br />
-					<button type="submit">Guardar</button>
-					<input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
+					<div class="buttons">
+						<button type="submit">Guardar</button>
+						<input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
+					</div>
 				</form>
 			{% else %}
 			<form enctype="multipart/form-data" method="post">
@@ -54,13 +57,17 @@
 					</tr>
 				</table>
 				<br />
-				<button type="submit">Guardar</button>
-				<input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
+				<div class="buttons">
+					<button type="submit">Guardar</button>
+					<input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
+				</div>
 			</form>
 			{% endif %}
 		{% else %}
 			<h3>No esta autorizado para ver esta página</h3>
-			<input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
+			<div class="buttons">
+				<input type="button" value="Volver" onclick="location.href='{% url 'manga' %}'">
+			</div>
 		{% endif %}
 	</body>
 {% endblock %}

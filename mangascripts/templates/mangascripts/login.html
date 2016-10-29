@@ -7,9 +7,9 @@
 	{% endif %}
 	{% if next %}
 		{% if user.is_authenticated %}
-		<p>Su cuenta no tiene acceso a esta página.</p>
+		<p class="info-msg">Su cuenta no tiene acceso a esta página.</p>
 		{% else %}
-		<p>Por favor, inicie sesión para ver esta página.</p>
+		<p class="info-msg">Por favor, inicie sesión para ver esta página.</p>
 		{% endif %}
 	{% endif %}
 	<form method="post" action="{% url 'login' %}">
@@ -25,9 +25,11 @@
 	</tr>
 	</table>
 	<br />
-	<input type="submit" value="Iniciar sesión" />
-	<input type="button" value="Volver" onclick="location.href='javascript:history.back(-1)'">
-	<input type="hidden" name="next" value="{{ next }}" />
+	<div class="buttons">
+		<input type="submit" value="Iniciar sesión" />
+		<input type="button" value="Volver" onclick="location.href='javascript:history.back(-1)'">
+		<input type="hidden" name="next" value="{{ next }}" />
+	</div>
 	</form>
 	{# Assumes you setup the password_reset view in your URLconf #}
 	<!-- <p><a href="{% url 'password_reset' %}">Lost password?</a></p> -->
