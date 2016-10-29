@@ -13,6 +13,9 @@ scrap &lt;nombre manga&gt;
 - One Piece
 
 **Changelog**
+
+- v2.4:
+	- Limpieza realizada en la base de datos
 - v2.3:
 	- Añadido Bootstrap al sistema de plantillas
 - v2.2:
