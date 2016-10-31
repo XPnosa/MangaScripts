@@ -2,7 +2,7 @@
 
 from django.core.management.base import BaseCommand, CommandError
 from django.contrib.auth.models import User
-from mangascripts.models import Manga, Volume, Chapter
+from mangascripts.models import Manga, Volume, Chapter, App_User
 import requests, random, bs4, time, sys, re
 
 # Constantes
@@ -15,6 +15,8 @@ try:
 except:
 	sc_user = User(username='scrap', password='pasword.'+str(random.randint(1000000,9999999)))
 	sc_user.save()
+	app_user = App_User(user=sc_user, info="Usuario interno de la aplicación")
+	app_user.save()
 	SCRAP_USER = sc_user
 
 # Variables

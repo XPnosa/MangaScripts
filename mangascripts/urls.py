@@ -3,7 +3,7 @@ from mangascripts.views import MangaListView, VolumeListView, ChapterListView, V
 from mangascripts.views import MangaAdd, VolumeAdd, ChapterAdd, VChapterAdd
 from mangascripts.views import MangaUpdate, VolumeUpdate, ChapterUpdate, VChapterUpdate
 from mangascripts.views import MangaDelete, VolumeDelete, ChapterDelete, VChapterDelete
-from mangascripts.views import UserDetailView, UserUpdate
+from mangascripts.views import UserDetailView, UserUpdate, InfoUpdate
 from django.views.generic.edit import CreateView
 from django.contrib.auth.forms import UserCreationForm
 
@@ -38,6 +38,7 @@ urlpatterns = [
 	# User
 	url(r'^user-details/user=(?P<pk>[0-9]+)$', UserDetailView.as_view(), name='user-details'),
 	url(r'^user-edit/user=(?P<pk>[0-9]+)$', UserUpdate.as_view(), name='user-edit'),
+	url(r'^info-edit/user=(?P<pk>[0-9]+)$', InfoUpdate.as_view(), name='info-edit'),
 	url(r'^password/$', views.change_password, name='change_password'),
 
 	# No genericas

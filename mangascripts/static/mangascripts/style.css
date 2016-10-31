@@ -62,12 +62,26 @@ tr:nth-child(even) {
 }
 
 .profile {
-	width: -moz-fit-content;
+	width: 98%;
 	background-color: #CCC;
 	padding: 10px 20px;
 	margin-left: 10px;
 	border: 5px ridge gray;
 	border-radius: 10px;
+}
+
+.l-profile {
+	width: 50%;
+	float: left;
+}
+
+.r-profile {
+	width: 50%;
+	float: right;
+}
+
+.b-profile {
+	clear: both;
 }
 
 .menu {

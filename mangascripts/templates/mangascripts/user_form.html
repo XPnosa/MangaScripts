@@ -6,6 +6,16 @@
 		<br />
 		{% if user.is_authenticated and this_user == user %}
 			{% if this_user %}
+				{% load replace %}
+				{% if form.errors %}
+					<h4 class="err-msg">Se han producido los siguientes errores:</h4>
+					<div class="error">
+						{% replace search="email" replacement="Correo" %}
+							{{ form.errors }}
+						{% endreplace %}
+					</div>
+					<br />
+				{% endif %}
 				<form enctype="multipart/form-data" method="post">
 					{% csrf_token %}
 					<table>
@@ -14,6 +24,7 @@
 							<th>Nombre</th>
 							<th>Apellidos</th>
 							<th>Correo</th>
+							<th>Descripción</th>
 						</tr>
 						<tr>
 							<td>{{ this_user.username }}</td>
@@ -21,6 +32,11 @@
 							<td>{{ form.first_name }}</td>
 							<td>{{ form.last_name }}</td>
 							<td>{{ form.email }}</td>
+							<td>
+								<center>
+									<input type="button" value="Editar" onclick="location.href='{% url 'info-edit' app_user.pk %}'">
+								</center>
+							</td>
 						</tr>
 					</table>
 					<br />

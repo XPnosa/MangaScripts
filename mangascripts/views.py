@@ -11,7 +11,7 @@ from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 
 # Create your views here.
 
-from .models import Manga, Volume, Chapter, User
+from .models import Manga, Volume, Chapter, User, App_User
 from .models import Manga_fav, Volume_fav, Chapter_fav, Chapter_read
 
 # Genericas
@@ -174,7 +174,11 @@ class UserDetailView(DetailView):
 	def get_context_data(self, **kwargs):
 		context = super(UserDetailView, self).get_context_data(**kwargs)
 		context['this_user'] = context['user']
+		context['app_user'] = App_User.objects.get(user=context['this_user'])
 		context['user'] = self.request.user
+		context['nm'] = Manga.objects.filter(user=context['this_user']).count()
+		context['nv'] = Volume.objects.filter(user=context['this_user']).count()
+		context['nc'] = Chapter.objects.filter(user=context['this_user']).count()
 		return context
 
 class UserUpdate(UpdateView):
@@ -185,6 +189,21 @@ class UserUpdate(UpdateView):
 	def get_context_data(self, **kwargs):
 		context = super(UpdateView, self).get_context_data(**kwargs)
 		context['this_user'] = context['user']
+		context['app_user'] = App_User.objects.get(user=context['this_user'])
+		context['user'] = self.request.user
+		return context
+
+	def get_success_url(self, **kwargs):
+		return reverse_lazy('user-details', kwargs = {'pk': self.request.user.pk})
+
+class InfoUpdate(UpdateView):
+	model = App_User
+	fields = ['info']
+	template_name = 'mangascripts/info_form.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(UpdateView, self).get_context_data(**kwargs)
+		context['this_user'] = context['app_user']
 		context['user'] = self.request.user
 		return context
 
@@ -754,6 +773,9 @@ def register(request):
 		form = UserCreationForm(request.POST)
 		if form.is_valid():
 			new_user = form.save()
+			app_user = App_User(user=new_user)
+			app_user.save()
+			print new_user
 			return HttpResponseRedirect("/mangascripts/register_redirect")
 	else:
 		form = UserCreationForm()

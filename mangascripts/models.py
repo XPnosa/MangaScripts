@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django.urls import reverse, reverse_lazy
 from django.core.validators import MinValueValidator, MaxValueValidator
 
+from django.contrib.auth.models import User
+
 # Create your models here.
 
 # Principales
@@ -53,6 +55,12 @@ class Chapter(models.Model):
 		unique_together = ('manga', 'n_chap')
 		ordering = ["n_chap"]
 
+class App_User(models.Model):
+	user = models.OneToOneField(User, unique=True, on_delete=models.CASCADE)
+	info = models.TextField(default=None, blank=True, null=True)
+	def __str__(self):
+		return str(self.user.username)
+		
 # Secundarias
 
 class Manga_fav(models.Model):

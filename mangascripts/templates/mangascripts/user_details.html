@@ -11,9 +11,18 @@
 			{% endif %}
 		</div>
 		<div class="profile">
-			<p><strong>Nombre</strong>: {% if this_user.first_name %}{{ this_user.first_name }}{% else %}?{% endif %}</p>
-			<p><strong>Apellidos</strong>: {% if this_user.last_name %}{{ this_user.last_name }}{% else %}?{% endif %}</p>
-			<p><strong>Correo</strong>: {% if this_user.email %}{{ this_user.email }}{% else %}?{% endif %}</p>
+			<div class="l-profile">
+				<p><strong>Nombre</strong>: {% if this_user.first_name %}{{ this_user.first_name }}{% else %}?{% endif %}</p>
+				<p><strong>Apellidos</strong>: {% if this_user.last_name %}{{ this_user.last_name }}{% else %}?{% endif %}</p>
+				<p><strong>Correo</strong>: {% if this_user.email %}{{ this_user.email }}{% else %}?{% endif %}</p>
+			</div>
+			<div class="r-profile">
+				<p><strong>Mangas creados</strong>: {% if nm %}{{ nm }}{% else %}0{% endif %}</p>
+				<p><strong>Volúmenes creados</strong>: {% if nv %}{{ nv }}{% else %}0{% endif %}</p>
+				<p><strong>Capítulos creados</strong>: {% if nc %}{{ nc }}{% else %}0{% endif %}</p>
+			</div>
+			<div class="b-profile"></div>
+			{% if app_user.info %}<div><br /><p><strong>Información Adicional: </strong>{{ app_user.info }}</p></div>{% endif %}
 		</div>
 		<div class="menu">
 			<br />

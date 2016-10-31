@@ -14,6 +14,9 @@ scrap &lt;nombre manga&gt;
 
 **Changelog**
 
+- v2.5:
+	- Expandido el modelo Usuario
+	- Correcciones en el script de scrap
 - v2.4:
 	- Limpieza realizada en la base de datos
 - v2.3:
